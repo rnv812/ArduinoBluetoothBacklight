@@ -1,0 +1,5 @@
+Base functions:
+1. Remote (bluetooth) turn On/Off light;
+2. Choose color (hex notation);
+3. Choose brightness (0-100);
+4. Turn off timer (minutes, smoothly to zero brightness).

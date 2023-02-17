@@ -2,7 +2,6 @@
 #include <Arduino.h>
 #include "LedStrip.h"
 #include "Packet.h"
-#include "Command.h"
 
 
 class Remote

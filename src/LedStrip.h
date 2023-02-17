@@ -1,16 +1,7 @@
 #pragma once
 #include "FastLED.h"
 #include "Timer.h"
-
-
-enum AnimationMode {REGULAR, BREATHING};
-
-
-struct Color {
-    uint8_t r;
-    uint8_t g;
-    uint8_t b;
-};
+#include "Protocol.h"
 
 
 class LedStrip
@@ -23,24 +14,24 @@ private:
     uint8_t brightness;
     Color color;
     uint8_t speed;
-    AnimationMode mode;
+    AnimationModes mode;
 public:
     LedStrip(CRGB* leds, int numLeds);
     
     // Power control
-    bool isOn();
-    void turnOn();
+    bool isOn() const {return this->statusOn;};
+    void turnOn() {this->statusOn = true;};
     void turnOff();
     
     // Timer
-    Timer* getTimer();
-    bool hasTurnOffTimer();
-    void setTurnOffTimer(Timer* timer);
-    void clearTurnOffTime();
+    Timer* getTimer() const {return this->timer;};
+    bool hasTurnOffTimer() const {return this->timer;};
+    void setTurnOffTimer(Timer* timer) {this->timer = timer;};
+    void clearTurnOffTime() {this->timer = nullptr;};
 
     // Other settings
-    void setBrightness(unsigned char level);
-    void setColor(Color color);
-    void setSpeed(uint8_t level);
-    void setMode(AnimationMode mode);
+    void setBrightness(unsigned char level) {this->brightness = level;};
+    void setColor(Color color) { this->color = color;};
+    void setSpeed(uint8_t level) {this->speed = level;};
+    void setMode(AnimationModes mode) {this->mode = mode;};
 };

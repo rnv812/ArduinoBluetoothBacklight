@@ -16,12 +16,16 @@ LedStrip* ledStrip;
 Remote* remote;
 
 
+// FUNCTIONS
+void executeCommand(const uint8_t* bytes, size_t size);
+
+
 void setup() {
     Serial.begin(9600);
 
     CRGB* leds = new CRGB[NUM_LEDS];
     ledStrip = new LedStrip(leds, NUM_LEDS);
-    remote = new Remote(&Serial, ledStrip);
+    remote = new Remote(&Serial);
 
     FastLED.addLeds<WS2812B, LED_PIN, COLORS_ORDER>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
     FastLED.setMaxPowerInVoltsAndMilliamps(5, CURRENT_LIMIT);
@@ -29,8 +33,20 @@ void setup() {
 
 
 void loop() {
-    remote->handleCommand();
-    if(ledStrip->isOn()) {
+    remote->receiveBytes();
+    if (remote->entirePacketReceived()) {
+        const Packet* entirePacket = remote->getPacket();
+        executeCommand(entirePacket->getBytes(), PACKET_SIZE);
+        remote->releasePacket();
+        
         
     }
+    if(ledStrip->isOn()) {
+        // draw stuff
+    }
+}
+
+void executeCommand(const uint8_t* bytes, size_t size)
+{
+    // mapping stuff
 }

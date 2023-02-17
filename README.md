@@ -56,7 +56,7 @@ Argument of command `4` (Mode):
 - `0` - regular;
 - `1` - breathing;
 - ...
-- *WILL BE CONTINUED*
+- For more modes see enumeration `AnimationModes` in `Protocol.h`.
 
 ### Examples of bytes sequences
 - `0x0 0x1` - will turn in the strip, because the first byte is **Power** comand code and the second byte is **turn on strip** command argument;

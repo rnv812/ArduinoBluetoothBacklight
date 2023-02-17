@@ -12,37 +12,25 @@
 
 
 // GLOBALS
-CRGB* leds;
-Remote* remote;
 LedStrip* ledStrip;
-
-
-void initLeds();
-void initGlobals();
+Remote* remote;
 
 
 void setup() {
     Serial.begin(9600);
-    initGlobals();
-    initLeds();
+
+    CRGB* leds = new CRGB[NUM_LEDS];
+    ledStrip = new LedStrip(leds, NUM_LEDS);
+    remote = new Remote(&Serial, ledStrip);
+
+    FastLED.addLeds<WS2812B, LED_PIN, COLORS_ORDER>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
+    FastLED.setMaxPowerInVoltsAndMilliamps(5, CURRENT_LIMIT);
 }
 
 
 void loop() {
-
-}
-
-
-void initGlobals()
-{
-    leds = new CRGB[NUM_LEDS];
-    ledStrip = new LedStrip(leds, NUM_LEDS);
-    remote = new Remote(&Serial, ledStrip);
-}
-
-
-void initLeds()
-{
-    FastLED.addLeds<WS2812B, LED_PIN, COLORS_ORDER>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
-    FastLED.setMaxPowerInVoltsAndMilliamps(5, CURRENT_LIMIT);
+    remote->handleCommand();
+    if(ledStrip->isOn()) {
+        
+    }
 }

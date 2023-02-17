@@ -53,8 +53,8 @@ Argument of command `3` (Speed):
 - `n` - set speed to `n` (0 - 255).
 
 Argument of command `4` (Mode):
-- `0` - static color;
-- `1` - static color (breathing);
+- `0` - regular;
+- `1` - breathing;
 - ...
 - *WILL BE CONTINUED*
 

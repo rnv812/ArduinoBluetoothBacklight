@@ -1,7 +1,9 @@
 #include <Arduino.h>
 #include "FastLED.h"
-#include "Remote.h"
-#include "LedStrip.h"
+#include "Remote.hpp"
+#include "LedStrip.hpp"
+#include "Timer.hpp"
+#include "Packet.hpp"
 
 
 // FIRMWARE SETTINGS
@@ -38,8 +40,6 @@ void loop() {
         const Packet* entirePacket = remote->getPacket();
         executeCommand(entirePacket->getBytes(), PACKET_SIZE);
         remote->releasePacket();
-        
-        
     }
     if(ledStrip->isOn()) {
         // draw stuff
@@ -48,5 +48,6 @@ void loop() {
 
 void executeCommand(const uint8_t* bytes, size_t size)
 {
+
     // mapping stuff
 }

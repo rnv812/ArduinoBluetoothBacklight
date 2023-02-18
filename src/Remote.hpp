@@ -1,7 +1,6 @@
 #pragma once
 #include <Arduino.h>
-#include "LedStrip.h"
-#include "Packet.h"
+#include "Packet.hpp"
 
 
 class Remote

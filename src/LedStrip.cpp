@@ -1,4 +1,4 @@
-#include "LedStrip.h"
+#include "LedStrip.hpp"
 
 
 LedStrip::LedStrip(CRGB* leds, int numLeds)

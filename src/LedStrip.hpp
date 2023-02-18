@@ -1,7 +1,7 @@
 #pragma once
 #include "FastLED.h"
-#include "Timer.h"
-#include "Protocol.h"
+#include "Timer.hpp"
+#include "Protocol.hpp"
 
 
 class LedStrip

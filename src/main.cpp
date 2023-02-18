@@ -37,14 +37,13 @@ void setup()
     Serial.begin(9600);
 
     CRGB *leds = new CRGB[NUM_LEDS];
-    ledStrip = new LedStrip(leds, NUM_LEDS);
-    remote = new Remote(&Serial);
-    activeTimer = nullptr;
-
     FastLED.addLeds<WS2812B, LED_PIN, COLORS_ORDER>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
     FastLED.setMaxPowerInVoltsAndMilliamps(5, CURRENT_LIMIT);
 
+    ledStrip = new LedStrip(leds, NUM_LEDS);
     ledStrip->setColor(START_COLOR);
+    remote = new Remote(&Serial);
+    activeTimer = nullptr;
 }
 
 

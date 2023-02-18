@@ -5,14 +5,7 @@
 #include "Timer.hpp"
 #include "Packet.hpp"
 #include "Protocol.hpp"
-
-
-// FIRMWARE SETTINGS
-#define NUM_LEDS 30            // number of leds on strip      |                           | default: 30
-#define LED_PIN 12             // data pin for led strip       | D pin index               | default: 12
-#define CURRENT_LIMIT 1000     // limit current consuption     | mA                        | default: 1000
-#define COLORS_ORDER GRB       // protocol colors order        | permutations of (R, G, B) | defualt: GRB
-#define START_COLOR 80, 80, 80 // start color                  | r, g, b                   | default 80, 80, 80
+#include "settings.hpp"
 
 
 // MESSAGES
@@ -33,11 +26,8 @@ void executePowerCommand(const uint8_t *bytes, int size);
 void setup()
 {
     Serial.begin(9600);
-
-    FastLED.addLeds<WS2812B, LED_PIN, COLORS_ORDER>(new CRGB[NUM_LEDS], NUM_LEDS).setCorrection(TypicalLEDStrip);
-    FastLED.setMaxPowerInVoltsAndMilliamps(5, CURRENT_LIMIT);
-
-    ledStrip = new LedStrip(FastLED, NUM_LEDS, Color(START_COLOR));
+    ledStrip = new LedStrip(Color(START_COLOR));
+    ledStrip->setMaxCurrent(CURRENT_LIMIT);
     remote = new Remote(Serial);
 }
 

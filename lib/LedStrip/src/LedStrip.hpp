@@ -2,12 +2,13 @@
 #include "FastLED.h"
 #include "Timer.hpp"
 #include "Protocol.hpp"
+#include "settings.hpp"
 
 
 class LedStrip
 {
 private:
-    CFastLED& FastLED;
+    CFastLED& controller;
     int numLeds;
     bool statusOn;
     Timer* timer;
@@ -16,7 +17,7 @@ private:
     uint8_t speed;
     AnimationModes mode;
 public:
-    LedStrip(CFastLED& FastLED, int numLeds, const Color& color);
+    LedStrip(const Color& color);
     
     // Power control
     bool isOn() const {return this->statusOn;};
@@ -34,4 +35,7 @@ public:
     void setColor(const Color& color) { this->color = color;};
     void setSpeed(uint8_t level) {this->speed = level;};
     void setMode(AnimationModes mode) {this->mode = mode;};
+
+    // Misc
+    void setMaxCurrent(int mA) {this->controller.setMaxPowerInVoltsAndMilliamps(REFERENCE_VOLATAGE, mA);};
 };

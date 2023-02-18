@@ -1,9 +1,10 @@
 #include "LedStrip.hpp"
 
 
-LedStrip::LedStrip(CFastLED& FastLED, int numLeds, const Color& color) : FastLED(FastLED), color(color.r, color.g, color.b)
+LedStrip::LedStrip(const Color& color) : controller(FastLED), color(color.r, color.g, color.b)
 {   
-    this->numLeds = numLeds;
+    this->numLeds = NUM_LEDS;
+    this->controller.addLeds<WS2812B, LED_PIN, CONTROLLER_COLORS_ORDER>(new CRGB[numLeds], numLeds).setCorrection(TypicalLEDStrip);
     this->statusOn = true;
     this->timer = nullptr;
 }
@@ -11,6 +12,6 @@ LedStrip::LedStrip(CFastLED& FastLED, int numLeds, const Color& color) : FastLED
 
 void LedStrip::turnOff()
 {
-    this->FastLED.clear(true);
+    this->controller.clear(true);
     this->statusOn = false;
 }

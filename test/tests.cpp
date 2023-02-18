@@ -35,3 +35,4 @@ void test_packet_getBytes()
     TEST_ASSERT_TRUE(packet.getBytes()[0] == (uint8_t)0);
     TEST_ASSERT_TRUE(packet.getBytes()[1] == (uint8_t)255);
 }
+

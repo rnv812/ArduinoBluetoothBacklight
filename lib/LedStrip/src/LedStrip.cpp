@@ -1,7 +1,7 @@
 #include "LedStrip.hpp"
 
 
-LedStrip::LedStrip(CRGB* leds, int numLeds)
+LedStrip::LedStrip(CRGB* leds, int numLeds, Color color) : color(color.r, color.g, color.b)
 {
     this->leds = leds;
     this->numLeds = numLeds;

@@ -40,8 +40,7 @@ void setup()
     FastLED.addLeds<WS2812B, LED_PIN, COLORS_ORDER>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
     FastLED.setMaxPowerInVoltsAndMilliamps(5, CURRENT_LIMIT);
 
-    ledStrip = new LedStrip(leds, NUM_LEDS);
-    ledStrip->setColor(START_COLOR);
+    ledStrip = new LedStrip(leds, NUM_LEDS, Color(START_COLOR));
     remote = new Remote(&Serial);
     activeTimer = nullptr;
 }
@@ -76,7 +75,7 @@ void executeCommandEntry(const uint8_t *bytes, int size)
             ledStrip->setBrightness(bytes[1]);
             break;
         case (uint8_t)CommandCodes::COLOR:
-            ledStrip->setColor(bytes[1], bytes[2], bytes[3]);
+            ledStrip->setColor(Color(bytes[1], bytes[2], bytes[3]));
             break;
         case (uint8_t)CommandCodes::SPEED:
             ledStrip->setSpeed(bytes[1]);

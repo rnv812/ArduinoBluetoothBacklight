@@ -16,7 +16,7 @@ private:
     uint8_t speed;
     AnimationModes mode;
 public:
-    LedStrip(CRGB* leds, int numLeds);
+    LedStrip(CRGB* leds, int numLeds, Color color);
     
     // Power control
     bool isOn() const {return this->statusOn;};
@@ -31,7 +31,7 @@ public:
 
     // Other settings
     void setBrightness(uint8_t level) {this->brightness = level;};
-    void setColor(uint8_t r, uint8_t g, uint8_t b) { this->color.r = r; this->color.g = g; this->color.b = b;};
+    void setColor(Color color) { this->color = color;};
     void setSpeed(uint8_t level) {this->speed = level;};
     void setMode(AnimationModes mode) {this->mode = mode;};
 };

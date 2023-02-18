@@ -7,7 +7,7 @@
 class LedStrip
 {
 private:
-    CRGB* leds;
+    CFastLED& FastLED;
     int numLeds;
     bool statusOn;
     Timer* timer;
@@ -16,7 +16,7 @@ private:
     uint8_t speed;
     AnimationModes mode;
 public:
-    LedStrip(CRGB* leds, int numLeds, Color color);
+    LedStrip(CFastLED& FastLED, int numLeds, const Color& color);
     
     // Power control
     bool isOn() const {return this->statusOn;};
@@ -27,11 +27,11 @@ public:
     Timer* getTimer() const {return this->timer;};
     bool hasTurnOffTimer() const {return this->timer;};
     void setTurnOffTimer(Timer* timer) {this->timer = timer;};
-    void clearTurnOffTime() {this->timer = nullptr;};
+    void clearTurnOffTime() {delete this->timer; this->timer = nullptr;};
 
     // Other settings
     void setBrightness(uint8_t level) {this->brightness = level;};
-    void setColor(Color color) { this->color = color;};
+    void setColor(const Color& color) { this->color = color;};
     void setSpeed(uint8_t level) {this->speed = level;};
     void setMode(AnimationModes mode) {this->mode = mode;};
 };

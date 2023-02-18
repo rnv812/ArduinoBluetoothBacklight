@@ -24,8 +24,6 @@
 // GLOBALS
 LedStrip *ledStrip;
 Remote *remote;
-Timer *activeTimer;
-
 
 // FUNCTIONS
 void executeCommandEntry(const uint8_t *bytes, int size);
@@ -36,13 +34,11 @@ void setup()
 {
     Serial.begin(9600);
 
-    CRGB *leds = new CRGB[NUM_LEDS];
-    FastLED.addLeds<WS2812B, LED_PIN, COLORS_ORDER>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
+    FastLED.addLeds<WS2812B, LED_PIN, COLORS_ORDER>(new CRGB[NUM_LEDS], NUM_LEDS).setCorrection(TypicalLEDStrip);
     FastLED.setMaxPowerInVoltsAndMilliamps(5, CURRENT_LIMIT);
 
-    ledStrip = new LedStrip(leds, NUM_LEDS, Color(START_COLOR));
-    remote = new Remote(&Serial);
-    activeTimer = nullptr;
+    ledStrip = new LedStrip(FastLED, NUM_LEDS, Color(START_COLOR));
+    remote = new Remote(Serial);
 }
 
 
@@ -100,20 +96,17 @@ void executePowerCommand(const uint8_t *bytes, int size)
             ledStrip->turnOn();
             break;
         case (uint8_t)PowerArgs::SET_OFFTIMER:
-            if (activeTimer) {
+            if (ledStrip->hasTurnOffTimer()) {
                 remote->sendWarning(TIMER_ALREADY_SET_MESSAGE);
                 return;
             }
-            activeTimer = new Timer(bytes[2]);
-            ledStrip->setTurnOffTimer(activeTimer);
+            ledStrip->setTurnOffTimer(new Timer(bytes[2]));
             break;
         case (uint8_t)PowerArgs::CLEAR_OFFTIMER:
-            if (!activeTimer) {
+            if (!ledStrip->hasTurnOffTimer()) {
                 return;
             }
             ledStrip->clearTurnOffTime();
-            delete activeTimer;
-            activeTimer = nullptr;
             break;
         default:
             remote->sendWarning(UNDEFINED_COMMAND_MESSAGE);

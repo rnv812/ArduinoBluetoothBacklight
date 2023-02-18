@@ -1,9 +1,8 @@
 #include "LedStrip.hpp"
 
 
-LedStrip::LedStrip(CRGB* leds, int numLeds, Color color) : color(color.r, color.g, color.b)
-{
-    this->leds = leds;
+LedStrip::LedStrip(CFastLED& FastLED, int numLeds, const Color& color) : FastLED(FastLED), color(color.r, color.g, color.b)
+{   
     this->numLeds = numLeds;
     this->statusOn = true;
     this->timer = nullptr;
@@ -12,6 +11,6 @@ LedStrip::LedStrip(CRGB* leds, int numLeds, Color color) : color(color.r, color.
 
 void LedStrip::turnOff()
 {
-    FastLED.clear(true);
+    this->FastLED.clear(true);
     this->statusOn = false;
 }

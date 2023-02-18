@@ -2,16 +2,15 @@
 #include <Arduino.h>
 
 
-Remote::Remote(HardwareSerial* serial)
+Remote::Remote(HardwareSerial& serial) : serial(serial)
 {
-    this->serial = serial;
     this->packet = nullptr;
 }
 
 
 void Remote::receiveBytes()
 {
-    if (!this->serial->available()) { 
+    if (!this->serial.available()) { 
         return;
     }
 
@@ -19,8 +18,8 @@ void Remote::receiveBytes()
         this->packet = new Packet();
     }
 
-    while (this->serial->available() && !this->packet->isFull()) {
-        this->packet->appendByte(this->serial->read());
+    while (this->serial.available() && !this->packet->isFull()) {
+        this->packet->appendByte(this->serial.read());
     }
     
     this->clearReceiveBuffer();
@@ -38,7 +37,7 @@ bool Remote::entirePacketReceived() const
 
 void Remote::clearReceiveBuffer()
 {
-    while (this->serial->available()) {
-        this->serial->read();
+    while (this->serial.available()) {
+        this->serial.read();
     }
 }

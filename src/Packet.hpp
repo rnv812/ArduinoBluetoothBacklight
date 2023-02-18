@@ -9,7 +9,7 @@ class Packet
 {
 private:
     uint8_t* bytes;
-    size_t currentSize;
+    int currentSize;
 public:
     Packet();
     ~Packet() {delete[] this-> bytes;};

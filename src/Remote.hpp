@@ -15,4 +15,5 @@ public:
     void clearReceiveBuffer();
     const Packet* getPacket() const {return this->packet;};
     void releasePacket() {delete packet;};
+    void sendWarning(const char* message) {this->serial->write(message);};
 };

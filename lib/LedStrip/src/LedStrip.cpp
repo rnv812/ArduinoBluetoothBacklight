@@ -22,3 +22,16 @@ void LedStrip::turnOff(bool testing)
 
     this->statusOn = false;
 }
+
+
+void LedStrip::draw()
+{
+    switch (this->mode)
+    {
+    case AnimationModes::REGULAR:
+        this->controller.showColor(this->color, this->brightness);
+        break;
+    default:
+        break;
+    }
+}

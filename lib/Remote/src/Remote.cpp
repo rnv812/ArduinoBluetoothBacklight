@@ -4,40 +4,23 @@
 
 Remote::Remote(HardwareSerial& serial) : serial(serial)
 {
-    this->packet = nullptr;
+    this->packetBytes = new uint8_t[PACKET_SIZE];
 }
 
 
-void Remote::receiveBytes()
+bool Remote::receiveAvailablePacket()
 {
-    if (!this->serial.available()) { 
-        return;
-    }
-
-    if (!this->packet){
-        this->packet = new Packet();
-    }
-
-    while (this->serial.available() && !this->packet->isFull()) {
-        this->packet->appendByte(this->serial.read());
-    }
-    
-    this->clearReceiveBuffer();
-}
-
-
-bool Remote::entirePacketReceived() const
-{
-    if (!this->packet) {
+    if (this->serial.available() < (PACKET_SIZE + PACKET_ENDING)) {
         return false;
     }
-    return this->packet->isFull();
-}
 
-
-void Remote::clearReceiveBuffer()
-{
-    while (this->serial.available()) {
-        this->serial.read();
+    for (int i = 0; i < PACKET_SIZE; i++) {
+        this->packetBytes[i] = serial.read();
     }
+
+    for (int i = 0; i < PACKET_ENDING; i++) {
+        serial.read();
+    }
+    
+    return true;
 }

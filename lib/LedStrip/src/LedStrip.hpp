@@ -40,6 +40,9 @@ public:
     void setMode(AnimationModes mode) {this->mode = mode;};
     AnimationModes getMode() {return this->mode;};
 
+    // Draw
+    void draw();
+
     // Misc
     void setMaxCurrent(int mA) {this->controller.setMaxPowerInVoltsAndMilliamps(REFERENCE_VOLATAGE, mA);};
 };

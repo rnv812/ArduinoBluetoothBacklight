@@ -1,19 +1,16 @@
 #pragma once
 #include <Arduino.h>
-#include "Packet.hpp"
+#include "settings.hpp"
 
 
 class Remote
 {
 private:
     HardwareSerial& serial;
-    Packet* packet;
+    uint8_t* packetBytes;
 public:
     Remote(HardwareSerial& serial);
-    void receiveBytes();
-    bool entirePacketReceived() const;
-    void clearReceiveBuffer();
-    const Packet* getPacket() const {return this->packet;};
-    void releasePacket() {delete packet;};
-    void sendWarning(const char* message) {this->serial.write(message);};
+    bool receiveAvailablePacket();
+    const uint8_t* getPacketBytes() const {return this->packetBytes;};
+    void sendWarning(const char* message) {this->serial.write(message); this->serial.write('\n');};
 };

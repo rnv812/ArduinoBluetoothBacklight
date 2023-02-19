@@ -9,10 +9,14 @@
 #define REFERENCE_VOLATAGE          5           // reference voltage of power supply of your scheme (V)
 #define CURRENT_LIMIT               1000        // limit current consuption (mA)    
 #define START_COLOR                 80, 80, 80  // start led strip color (r, g, b)
-
+#define DEBUG_PRINT                 true        // print detailed response data to bluetooth serial
 
 // FEEDBACK MESSAGES
 #define BAD_PACKET_MESSAGE "Bad packet is received"
 #define TIMER_ALREADY_SET_MESSAGE "Timer is already set"
 #define INVALID_COMMAND_MESSAGE "Command is invalid"
 #define INVALID_ARGUMENTS_MESSAGE "Argument of command is invalid"
+
+// PACKET
+#define PACKET_SIZE 4
+#define PACKET_ENDING 2     // \r\n symbols at the end

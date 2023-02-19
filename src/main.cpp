@@ -22,7 +22,7 @@ struct ByteHex
 // FUNCTIONS
 void executeCommandEntry(const uint8_t *bytes, int size);
 void executePowerCommand(const uint8_t *bytes, int size);
-void printDetails(const uint8_t *bytes, int size);
+void debugPrint(const uint8_t *bytes, int size);
 ByteHex byteToHex(uint8_t byte);
 
 
@@ -38,7 +38,7 @@ void setup()
 void loop()
 {
     if (remote->receiveAvailablePacket()) {
-        printDetails(remote->getPacketBytes(), PACKET_SIZE);
+        debugPrint(remote->getPacketBytes(), PACKET_SIZE);
         executeCommandEntry(remote->getPacketBytes(), PACKET_SIZE);
     }
     if (ledStrip->isOn()) {
@@ -49,8 +49,8 @@ void loop()
 
 void executeCommandEntry(const uint8_t *bytes, int size)
 {
-    if (size < 4) {
-        remote->sendWarning(BAD_PACKET_MESSAGE);
+    if (size < DEFAULT_PROTOCOL_PACKET_SIZE) {
+        remote->sendMessage(TOO_SHORT_PACKET_MSG);
         return;
     }
 
@@ -60,22 +60,26 @@ void executeCommandEntry(const uint8_t *bytes, int size)
             break;
         case (uint8_t)CommandCodes::BRIGHTNESS:
             ledStrip->setBrightness(bytes[1]);
+            remote->sendMessage(BRIGHTNESS_MSG);
             break;
         case (uint8_t)CommandCodes::COLOR:
             ledStrip->setColor(CRGB(bytes[1], bytes[2], bytes[3]));
+            remote->sendMessage(COLOR_MSG);
             break;
         case (uint8_t)CommandCodes::SPEED:
             ledStrip->setSpeed(bytes[1]);
+            remote->sendMessage(SPEED_MSG);
             break;
         case (uint8_t)CommandCodes::MODE:
             if(bytes[1] >= (uint8_t)AnimationModes::END) {
-                remote->sendWarning(INVALID_ARGUMENTS_MESSAGE);
+                remote->sendMessage(INVALID_MODE_MSG);
                 return;
             }
+            remote->sendMessage(MODE_MSG);
             ledStrip->setMode((AnimationModes)bytes[1]);
             break;
         default:
-            remote->sendWarning(INVALID_COMMAND_MESSAGE);
+            remote->sendMessage(INVALID_COMMAND_MSG);
             break;
     }
 }
@@ -86,32 +90,38 @@ void executePowerCommand(const uint8_t *bytes, int size)
     switch (bytes[1]) {
         case (uint8_t)PowerArgs::OFF:
             ledStrip->turnOff();
+            remote->sendMessage(POWER_OFF_MSG);
             break;
         case (uint8_t)PowerArgs::ON:
             ledStrip->turnOn();
+            remote->sendMessage(POWER_ON_MSG);
             break;
         case (uint8_t)PowerArgs::SET_OFFTIMER:
             if (ledStrip->hasTurnOffTimer()) {
-                remote->sendWarning(TIMER_ALREADY_SET_MESSAGE);
+                remote->sendMessage(TIMER_ALREADY_SET_MSG);
                 return;
             }
+            remote->sendMessage(TIMER_SET_MSG);
             ledStrip->setTurnOffTimer(new Timer(bytes[2]));
             break;
         case (uint8_t)PowerArgs::CLEAR_OFFTIMER:
             if (!ledStrip->hasTurnOffTimer()) {
+                remote->sendMessage(NO_TIMER_MSG);
                 return;
             }
+            remote->sendMessage(CLEAR_TIMER_MSG);
             ledStrip->clearTurnOffTime();
             break;
         default:
-            remote->sendWarning(INVALID_ARGUMENTS_MESSAGE);
+            remote->sendMessage(INVALID_POWER_ARG_MSG);
             break;
     }
 }
 
 
-void printDetails(const uint8_t *bytes, int size)
+void debugPrint(const uint8_t *bytes, int size)
 {
+    Serial.println("=== DEBUG PRINT ===");
     Serial.write("Packet size: ");
     Serial.write(size + 48);
     Serial.write('\n');

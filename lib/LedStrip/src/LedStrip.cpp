@@ -1,7 +1,7 @@
 #include "LedStrip.hpp"
 
 
-LedStrip::LedStrip() : controller(FastLED), color(Color(START_COLOR))
+LedStrip::LedStrip() : controller(FastLED), color(CRGB(START_COLOR))
 {   
     this->numLeds = NUM_LEDS;
     this->controller.addLeds<WS2812B, LED_PIN, CONTROLLER_COLORS_ORDER>(new CRGB[numLeds], numLeds).setCorrection(TypicalLEDStrip);
@@ -13,8 +13,12 @@ LedStrip::LedStrip() : controller(FastLED), color(Color(START_COLOR))
 }
 
 
-void LedStrip::turnOff()
+void LedStrip::turnOff(bool testing)
 {
-    this->controller.clear(true);
+    this->controller.clear();
+    if (!testing) {
+        this->controller.showColor(CRGB::Black, 0);
+    }
+
     this->statusOn = false;
 }

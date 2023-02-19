@@ -13,7 +13,7 @@ private:
     bool statusOn;
     Timer* timer;
     uint8_t brightness;
-    Color color;
+    CRGB color;
     uint8_t speed;
     AnimationModes mode;
 public:
@@ -22,7 +22,7 @@ public:
     // Power control
     bool isOn() const {return this->statusOn;};
     void turnOn() {this->statusOn = true;};
-    void turnOff();
+    void turnOff(bool testing=false);
     
     // Timer
     Timer* getTimer() const {return this->timer;};
@@ -33,8 +33,8 @@ public:
     // Other settings
     void setBrightness(uint8_t level) {this->brightness = level;};
     uint8_t getBrightness() {return this->brightness;};
-    void setColor(const Color& color) {this->color = color;};
-    Color getColor() {return this->color;};
+    void setColor(const CRGB& color) {this->color = color;};
+    CRGB getColor() {return this->color;};
     void setSpeed(uint8_t level) {this->speed = level;};
     uint8_t getSpeed() {return this->speed;};
     void setMode(AnimationModes mode) {this->mode = mode;};

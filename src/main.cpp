@@ -35,7 +35,7 @@ void loop()
         remote->releasePacket();
     }
     if (ledStrip->isOn()) {
-        // draw stuff
+        
     }
 }
 
@@ -55,7 +55,7 @@ void executeCommandEntry(const uint8_t *bytes, int size)
             ledStrip->setBrightness(bytes[1]);
             break;
         case (uint8_t)CommandCodes::COLOR:
-            ledStrip->setColor(Color(bytes[1], bytes[2], bytes[3]));
+            ledStrip->setColor(CRGB(bytes[1], bytes[2], bytes[3]));
             break;
         case (uint8_t)CommandCodes::SPEED:
             ledStrip->setSpeed(bytes[1]);

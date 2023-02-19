@@ -29,7 +29,8 @@ enum class PowerArgs {
 
 enum class AnimationModes {
     REGULAR = 0,
-    BREATHING = 1
+    BREATHING = 1,
+    END = 2
 };
 
 

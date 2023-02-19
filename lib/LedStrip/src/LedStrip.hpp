@@ -17,7 +17,7 @@ private:
     uint8_t speed;
     AnimationModes mode;
 public:
-    LedStrip(const Color& color);
+    LedStrip();
     
     // Power control
     bool isOn() const {return this->statusOn;};
@@ -32,9 +32,13 @@ public:
 
     // Other settings
     void setBrightness(uint8_t level) {this->brightness = level;};
-    void setColor(const Color& color) { this->color = color;};
+    uint8_t getBrightness() {return this->brightness;};
+    void setColor(const Color& color) {this->color = color;};
+    Color getColor() {return this->color;};
     void setSpeed(uint8_t level) {this->speed = level;};
+    uint8_t getSpeed() {return this->speed;};
     void setMode(AnimationModes mode) {this->mode = mode;};
+    AnimationModes getMode() {return this->mode;};
 
     // Misc
     void setMaxCurrent(int mA) {this->controller.setMaxPowerInVoltsAndMilliamps(REFERENCE_VOLATAGE, mA);};

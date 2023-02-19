@@ -8,12 +8,6 @@
 #include "settings.hpp"
 
 
-// MESSAGES
-#define BAD_PACKET_MESSAGE "Bad packet is received"
-#define TIMER_ALREADY_SET_MESSAGE "Timer is already set"
-#define UNDEFINED_COMMAND_MESSAGE "Command is undefined"
-
-
 // GLOBALS
 LedStrip *ledStrip;
 Remote *remote;
@@ -26,7 +20,7 @@ void executePowerCommand(const uint8_t *bytes, int size);
 void setup()
 {
     Serial.begin(9600);
-    ledStrip = new LedStrip(Color(START_COLOR));
+    ledStrip = new LedStrip();
     ledStrip->setMaxCurrent(CURRENT_LIMIT);
     remote = new Remote(Serial);
 }
@@ -67,10 +61,14 @@ void executeCommandEntry(const uint8_t *bytes, int size)
             ledStrip->setSpeed(bytes[1]);
             break;
         case (uint8_t)CommandCodes::MODE:
+            if(bytes[1] >= (uint8_t)AnimationModes::END) {
+                remote->sendWarning(INVALID_ARGUMENTS_MESSAGE);
+                return;
+            }
             ledStrip->setMode((AnimationModes)bytes[1]);
             break;
         default:
-            remote->sendWarning(BAD_PACKET_MESSAGE);
+            remote->sendWarning(INVALID_COMMAND_MESSAGE);
             break;
     }
 }
@@ -99,7 +97,7 @@ void executePowerCommand(const uint8_t *bytes, int size)
             ledStrip->clearTurnOffTime();
             break;
         default:
-            remote->sendWarning(UNDEFINED_COMMAND_MESSAGE);
+            remote->sendWarning(INVALID_ARGUMENTS_MESSAGE);
             break;
     }
 }

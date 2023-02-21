@@ -10,8 +10,8 @@
 #define CURRENT_LIMIT               1000        // limit current consuption (mA)    
 #define START_COLOR                 80, 80, 80  // start led strip color (r, g, b)
 #define DEBUG_PRINT                 true        // wether to print packet data to Serial
-#define ITERATIONS_TO_REDRAW        1000        // count of iterations after which leds are redrawn (rude speed adjustment), depents on 
-#define SPEED_FACTOR                2           // factor of influency of speed value from bluetooth
+#define MIN_SPEED_ITERATIONS        10000       // count of iterations to redraw frame on minimal speed (more iterations -> more slow)
+#define MAX_SPEED_ITERATIONS        1000        // count of iterations to redraw frame on maximum speed
 
 
 // FEEDBACK MESSAGES

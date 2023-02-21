@@ -17,9 +17,14 @@ private:
     uint8_t speed;
     AnimationModes mode;
     unsigned int iterationsRemainedToRedraw;
-    static const int minIterationsToRedraw = ITERATIONS_TO_REDRAW / SPEED_FACTOR;
-    static const int maxIterationsToRedraw = ITERATIONS_TO_REDRAW * SPEED_FACTOR;
-    int getActualIterationsToRedraw();
+    unsigned int getActualIterationsToRedraw();
+
+    // Dynamic properties
+    uint8_t dynBrightness;
+
+    // Animation modes
+    void regular();
+    void breathing();
 public:
     LedStrip();
     ~LedStrip();
@@ -35,7 +40,7 @@ public:
     void setTurnOffTimer(Timer* timer) {this->timer = timer;};
     void clearTurnOffTime() {delete this->timer; this->timer = nullptr;};
 
-    // Other settings
+    // Settings
     void setBrightness(uint8_t level) {this->brightness = level;};
     uint8_t getBrightness() {return this->brightness;};
     void setColor(const CRGB& color) {this->color = color;};
@@ -45,9 +50,6 @@ public:
     void setMode(AnimationModes mode) {this->mode = mode;};
     AnimationModes getMode() {return this->mode;};
 
-    // Draw
     void draw();
-
-    // Misc
     void setMaxCurrent(int mA) {this->controller.setMaxPowerInVoltsAndMilliamps(REFERENCE_VOLATAGE, mA);};
 };

@@ -1,6 +1,13 @@
 #include "LedStrip.hpp"
 
 
+int LedStrip::getActualIterationsToRedraw()
+{
+    float scaledSpeed = this->speed / 255.f;
+    return minIterationsToRedraw + (maxIterationsToRedraw - minIterationsToRedraw) * scaledSpeed;
+}
+
+
 LedStrip::LedStrip() : controller(FastLED), color(CRGB(START_COLOR))
 {   
     this->numLeds = NUM_LEDS;
@@ -10,6 +17,13 @@ LedStrip::LedStrip() : controller(FastLED), color(CRGB(START_COLOR))
     this->brightness = 128;
     this->speed = 128;
     this->mode = AnimationModes::REGULAR;
+    this->iterationsRemainedToRedraw = getActualIterationsToRedraw();
+}
+
+
+LedStrip::~LedStrip()
+{
+    delete[] this->controller.leds();
 }
 
 
@@ -26,6 +40,14 @@ void LedStrip::turnOff(bool testing)
 
 void LedStrip::draw()
 {
+    if (this->iterationsRemainedToRedraw > 0) {
+        this->iterationsRemainedToRedraw--;
+        return;
+    }
+    else {
+        this->iterationsRemainedToRedraw = getActualIterationsToRedraw();
+    }
+
     switch (this->mode)
     {
     case AnimationModes::REGULAR:

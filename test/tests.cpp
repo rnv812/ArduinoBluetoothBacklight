@@ -3,27 +3,27 @@
 #include "LedStrip.hpp"
 
 
-void test_ledstrip_ParameterPower();
-void test_ledstrip_TurnOffTimer();
-void test_ledstrip_ParameterBrightness();
-void test_ledstrip_ParameterSpeed();
-void test_ledstrip_ParameterColor();
-void test_ledstrip_ParameterMode();
+void testLedstripParameterPower();
+void testLedstripTurnOffTimer();
+void testLedstripParameterBrightness();
+void testLedstripParameterSpeed();
+void testLedstripParameterColor();
+void testLedstripParameterMode();
 
 
 int main( int argc, char **argv) {
     UNITY_BEGIN();
-    RUN_TEST(test_ledstrip_ParameterPower);
-    RUN_TEST(test_ledstrip_TurnOffTimer);
-    RUN_TEST(test_ledstrip_ParameterBrightness);
-    RUN_TEST(test_ledstrip_ParameterSpeed);
-    RUN_TEST(test_ledstrip_ParameterColor);
-    RUN_TEST(test_ledstrip_ParameterMode);
+    RUN_TEST(testLedstripParameterPower);
+    RUN_TEST(testLedstripTurnOffTimer);
+    RUN_TEST(testLedstripParameterBrightness);
+    RUN_TEST(testLedstripParameterSpeed);
+    RUN_TEST(testLedstripParameterColor);
+    RUN_TEST(testLedstripParameterMode);
     UNITY_END();
 }
 
 
-void test_ledstrip_ParameterPower()
+void testLedstripParameterPower()
 {
     LedStrip ledStrip;
     TEST_ASSERT_TRUE(ledStrip.isOn() == true);
@@ -33,7 +33,7 @@ void test_ledstrip_ParameterPower()
     TEST_ASSERT_TRUE(ledStrip.isOn() == true);
 }
 
-void test_ledstrip_TurnOffTimer()
+void testLedstripTurnOffTimer()
 {
     LedStrip ledStrip;
     TEST_ASSERT_TRUE(ledStrip.hasTurnOffTimer() == false);
@@ -46,7 +46,7 @@ void test_ledstrip_TurnOffTimer()
     TEST_ASSERT_TRUE(ledStrip.getTimer() == nullptr);
 }
 
-void test_ledstrip_ParameterBrightness()
+void testLedstripParameterBrightness()
 {
     LedStrip ledStrip;
     ledStrip.setBrightness(13);
@@ -54,7 +54,7 @@ void test_ledstrip_ParameterBrightness()
 }
 
 
-void test_ledstrip_ParameterSpeed()
+void testLedstripParameterSpeed()
 {
     LedStrip ledStrip;
     ledStrip.setSpeed(188);
@@ -62,7 +62,7 @@ void test_ledstrip_ParameterSpeed()
 }
 
 
-void test_ledstrip_ParameterColor()
+void testLedstripParameterColor()
 {
     LedStrip ledStrip;
     CRGB color(128, 64, 64);
@@ -71,7 +71,7 @@ void test_ledstrip_ParameterColor()
 }
 
 
-void test_ledstrip_ParameterMode()
+void testLedstripParameterMode()
 {
     LedStrip ledStrip;
     ledStrip.setMode(AnimationModes::BREATHING);

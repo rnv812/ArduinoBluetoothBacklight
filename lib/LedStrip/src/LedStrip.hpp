@@ -16,8 +16,13 @@ private:
     CRGB color;
     uint8_t speed;
     AnimationModes mode;
+    unsigned int iterationsRemainedToRedraw;
+    static const int minIterationsToRedraw = ITERATIONS_TO_REDRAW / SPEED_FACTOR;
+    static const int maxIterationsToRedraw = ITERATIONS_TO_REDRAW * SPEED_FACTOR;
+    int getActualIterationsToRedraw();
 public:
     LedStrip();
+    ~LedStrip();
     
     // Power control
     bool isOn() const {return this->statusOn;};

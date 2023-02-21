@@ -38,10 +38,10 @@ void setup()
 void loop()
 {
     if (remote->receiveAvailablePacket()) {
+        executeCommandEntry(remote->getPacketBytes(), PACKET_SIZE);
         if (DEBUG_PRINT) {
             debugPrint(remote->getPacketBytes(), PACKET_SIZE);
         }
-        executeCommandEntry(remote->getPacketBytes(), PACKET_SIZE);
     }
     if (ledStrip->isOn()) {
         ledStrip->draw();

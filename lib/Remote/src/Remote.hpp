@@ -12,6 +12,6 @@ public:
     Remote(HardwareSerial& serial);
     bool receiveAvailablePacket();
     const uint8_t* getPacketBytes() const {return this->packetBytes;};
-    void sendMessage(const char* message) {this->serial.write(message); this->serial.write('\n');};
+    void sendMessage(const char* message) {this->serial.write('\n'); this->serial.write(message); this->serial.write('\n');};
     void waitExtraBytesAndClear() {delay(EXTRA_BYTES_RECEIVE_DELAY); while (this->serial.available()) this->serial.read();};
 };

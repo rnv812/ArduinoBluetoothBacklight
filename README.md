@@ -63,7 +63,7 @@ Argument of command `4` (Mode):
 - `0x2 0x255 0x255 0x255` - will set active color to white, because the first byte is **Color** comand code and rest three bytes are **hex representation of color**.
 
 ## Notes
-As bluetooth sender app, I recommend "Serial Bluetooth Terminal" from Kai Morich. There you can nicely customize interface so it will look like usual remote. 
+As sender app, I recommend [Serial Bluetooth Terminal](https://play.google.com/store/apps/details?id=de.kai_morich.serial_bluetooth_terminal) by Kai Morich. There you can nicely customize interface so it will look like usual remote. 
 
 
 

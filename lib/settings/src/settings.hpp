@@ -12,7 +12,6 @@
 #define DEBUG_PRINT                 true        // wether to print packet data to Serial
 #define MIN_SPEED_ITERATIONS        1000000     // count of iterations to redraw frame on minimal speed (more iterations -> more slow)
 #define MAX_SPEED_ITERATIONS        1000        // count of iterations to redraw frame on maximum speed
-#define SMOOTH 
 
 
 // FEEDBACK MESSAGES
@@ -37,3 +36,4 @@
 #define PACKET_SIZE 4                   // change this value if you use your own custom protocol and commandExecuteEntry
 #define PACKET_ENDING 0                 // some bluetooth apps append this (\r\n) two bytes to the end of message 
                                         // you can set this parameter to 0 if your app doen't send those
+#define EXTRA_BYTES_RECEIVE_DELAY    20 // time (in milliseconds) to wait remaining bytes of bad packet before clear them

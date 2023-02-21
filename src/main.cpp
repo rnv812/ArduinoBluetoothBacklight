@@ -82,7 +82,7 @@ void executeCommandEntry(const uint8_t *bytes, int size)
             break;
         default:
             remote->sendMessage(INVALID_COMMAND_MSG);
-            remote->clearBuffer();
+            remote->waitExtraBytesAndClear();
             break;
     }
 }
@@ -117,7 +117,7 @@ void executePowerCommand(const uint8_t *bytes, int size)
             break;
         default:
             remote->sendMessage(INVALID_POWER_ARG_MSG);
-            remote->clearBuffer();
+            remote->waitExtraBytesAndClear();
             break;
     }
 }

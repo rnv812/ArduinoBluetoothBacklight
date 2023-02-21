@@ -33,6 +33,7 @@ void testLedstripParameterPower()
     TEST_ASSERT_TRUE(ledStrip.isOn() == true);
 }
 
+
 void testLedstripTurnOffTimer()
 {
     LedStrip ledStrip;
@@ -45,6 +46,7 @@ void testLedstripTurnOffTimer()
     TEST_ASSERT_TRUE(ledStrip.hasTurnOffTimer() == false);
     TEST_ASSERT_TRUE(ledStrip.getTimer() == nullptr);
 }
+
 
 void testLedstripParameterBrightness()
 {

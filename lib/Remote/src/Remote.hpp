@@ -13,4 +13,5 @@ public:
     bool receiveAvailablePacket();
     const uint8_t* getPacketBytes() const {return this->packetBytes;};
     void sendMessage(const char* message) {this->serial.write(message); this->serial.write('\n');};
+    void clearBuffer() {while (this->serial.available()) this->serial.read();};
 };

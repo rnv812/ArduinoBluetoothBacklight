@@ -38,7 +38,9 @@ void setup()
 void loop()
 {
     if (remote->receiveAvailablePacket()) {
-        debugPrint(remote->getPacketBytes(), PACKET_SIZE);
+        if (DEBUG_PRINT) {
+            debugPrint(remote->getPacketBytes(), PACKET_SIZE);
+        }
         executeCommandEntry(remote->getPacketBytes(), PACKET_SIZE);
     }
     if (ledStrip->isOn()) {
@@ -121,7 +123,7 @@ void executePowerCommand(const uint8_t *bytes, int size)
 
 void debugPrint(const uint8_t *bytes, int size)
 {
-    Serial.println("=== DEBUG PRINT ===");
+    Serial.println("=== DEBUG ===");
     Serial.write("Packet size: ");
     Serial.write(size + 48);
     Serial.write('\n');
@@ -134,6 +136,7 @@ void debugPrint(const uint8_t *bytes, int size)
         Serial.write(byteHex.h); Serial.write(byteHex.l); 
         Serial.write('\n');
     }
+    Serial.println("=== END OF DEBUG ===");
 }
 
 

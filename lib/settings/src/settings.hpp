@@ -29,11 +29,11 @@
 #define INVALID_MODE_MSG        "Unrecognized mode"
 #define INVALID_COMMAND_MSG     "Unrecognized command"
 #define INVALID_POWER_ARG_MSG   "Unrecognized power action"
-
+#define BUFFER_IS_CLEARED       "Buffer is cleared"
 
 // PACKET
-#define DEFAULT_PROTOCOL_PACKET_SIZE 4  // don't modify this value if you use default commandExecuteEntry in orginal state
-#define PACKET_SIZE 4                   // change this value if you use your own custom protocol and commandExecuteEntry
-#define PACKET_ENDING 0                 // some bluetooth apps append this (\r\n) two bytes to the end of message 
-                                        // you can set this parameter to 0 if your app doen't send those
-#define EXTRA_BYTES_RECEIVE_DELAY    20 // time (in milliseconds) to wait remaining bytes of bad packet before clear them
+#define DEFAULT_PROTOCOL_PACKET_SIZE    4       // don't modify this value if you use default commandExecuteEntry in orginal state
+#define PACKET_SIZE                     4       // change this value if you use your own custom protocol and commandExecuteEntry
+#define PACKET_ENDING                   0       // some bluetooth apps append this (\r\n) two bytes to the end of message 
+                                                // you can set this parameter to 0 if your app doen't send those
+#define EXTRA_BYTES_RECEIVE_DELAY       20      // time (in milliseconds) to wait remaining bytes of bad packet before clear them

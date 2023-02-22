@@ -4,9 +4,7 @@
 void debugPrint(HardwareSerial& serial, const uint8_t *bytes, int size)
 {
     serial.println("=== DEBUG ===");
-    serial.write("Packet size: ");
-    serial.write(size + 48);
-    serial.write('\n');
+    serial.println("Received packet bytes:");
 
     for (int i = 0; i < size; i++) {
         serial.write("Byte ");

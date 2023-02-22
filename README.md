@@ -54,8 +54,8 @@ Argument of command `4` (Mode):
 - ...
 - For more modes see enumeration `AnimationModes` in `Protocol.h`
 
-### Command argument interpretation
-The next byte after the command argument bytes describes how to interp command argument.
+### Command argument action
+The next byte after the command argument bytes describes what to do with an argument.
 
 Power -> set timer:
 - `0` - set timer for `n` minutes

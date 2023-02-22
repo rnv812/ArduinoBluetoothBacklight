@@ -28,7 +28,7 @@ enum class AnimationModes {
 };
 
 
-enum class ArgumentInterpretations {
+enum class ArgumentActions {
     SET = 0,
     DECREASE = 1,
     INCREASE = 2

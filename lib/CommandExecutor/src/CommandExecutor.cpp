@@ -49,14 +49,14 @@ CommandResult CommandExecutor::executePowerCommand(const uint8_t *bytes, int siz
 
 CommandResult CommandExecutor::executeTimerCommand(const uint8_t *bytes, int size)
 {
-    switch ((ArgumentInterpretations)bytes[3]) {
-        case ArgumentInterpretations::SET:
+    switch ((ArgumentActions)bytes[3]) {
+        case ArgumentActions::SET:
             if (this->ledStrip->hasTurnOffTimer()) {
                 return CommandResult(TIMER_ALREADY_SET_MSG, false);
             }
             this->ledStrip->setTurnOffTimer(new Timer(bytes[2]));
             return CommandResult(TIMER_SET_MSG, true);
-        case ArgumentInterpretations::DECREASE:
+        case ArgumentActions::DECREASE:
             if (!this->ledStrip->hasTurnOffTimer()) {
                 return CommandResult(NO_TIMER_MSG, false);
             }
@@ -67,7 +67,7 @@ CommandResult CommandExecutor::executeTimerCommand(const uint8_t *bytes, int siz
                 return CommandResult(CLEAR_TIMER_MSG, true); 
             }
             return CommandResult(DECREASE_TIMER_MSG, true);
-        case ArgumentInterpretations::INCREASE:
+        case ArgumentActions::INCREASE:
             if (!this->ledStrip->hasTurnOffTimer()) {
                 this->ledStrip->setTurnOffTimer(new Timer(bytes[2]));
                 return CommandResult(TIMER_SET_MSG, true);
@@ -82,14 +82,14 @@ CommandResult CommandExecutor::executeTimerCommand(const uint8_t *bytes, int siz
 
 CommandResult CommandExecutor::executeBrightnessCommand(const uint8_t *bytes, int size)
 {
-    switch ((ArgumentInterpretations)bytes[2]) {
-        case ArgumentInterpretations::SET:
+    switch ((ArgumentActions)bytes[2]) {
+        case ArgumentActions::SET:
             ledStrip->setBrightness(bytes[1]);
             return CommandResult(BRIGHTNESS_MSG, true);
-        case ArgumentInterpretations::DECREASE:
+        case ArgumentActions::DECREASE:
             ledStrip->decreaseBrightness(bytes[1]);
             return CommandResult(BRIGHTNESS_MSG, true);
-        case ArgumentInterpretations::INCREASE:
+        case ArgumentActions::INCREASE:
             ledStrip->increaseBrightness(bytes[1]);
             return CommandResult(BRIGHTNESS_MSG, true);
         default:
@@ -100,14 +100,14 @@ CommandResult CommandExecutor::executeBrightnessCommand(const uint8_t *bytes, in
 
 CommandResult CommandExecutor::executeSpeedCommand(const uint8_t *bytes, int size)
 {
-    switch ((ArgumentInterpretations)bytes[2]) {
-        case ArgumentInterpretations::SET:
+    switch ((ArgumentActions)bytes[2]) {
+        case ArgumentActions::SET:
             ledStrip->setSpeed(bytes[1]);
             return CommandResult(SPEED_MSG, true);
-        case ArgumentInterpretations::DECREASE:
+        case ArgumentActions::DECREASE:
             ledStrip->decreaseSpeed(bytes[1]);
             return CommandResult(SPEED_MSG, true);
-        case ArgumentInterpretations::INCREASE:
+        case ArgumentActions::INCREASE:
             ledStrip->increaseSpeed(bytes[1]);
             return CommandResult(SPEED_MSG, true);
         default:
@@ -119,14 +119,14 @@ CommandResult CommandExecutor::executeSpeedCommand(const uint8_t *bytes, int siz
 CommandResult CommandExecutor::executeColorCommand(const uint8_t *bytes, int size)
 {
     CRGB color(bytes[1], bytes[2], bytes[3]);
-    switch ((ArgumentInterpretations)bytes[4]) {
-        case ArgumentInterpretations::SET:
+    switch ((ArgumentActions)bytes[4]) {
+        case ArgumentActions::SET:
             ledStrip->setColor(color);
             return CommandResult(COLOR_MSG, true);
-        case ArgumentInterpretations::DECREASE:
+        case ArgumentActions::DECREASE:
             ledStrip->decreaseColor(color);
             return CommandResult(COLOR_MSG, true);
-        case ArgumentInterpretations::INCREASE:
+        case ArgumentActions::INCREASE:
             ledStrip->increaseColor(color);
             return CommandResult(COLOR_MSG, true);
         default:

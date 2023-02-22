@@ -26,3 +26,10 @@ enum class AnimationModes {
     // for cheking when type casting
     END = 2
 };
+
+
+enum class ArgumentInterpretations {
+    SET = 0,
+    DECREASE = 1,
+    INCREASE = 2
+};

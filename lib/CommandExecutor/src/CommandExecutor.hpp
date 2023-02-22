@@ -17,6 +17,11 @@ class CommandExecutor
 private:
     LedStrip* ledStrip;
     CommandResult executePowerCommand(const uint8_t *bytes, int size);
+    CommandResult executeTimerCommand(const uint8_t *bytes, int size);
+    CommandResult executeBrightnessCommand(const uint8_t *bytes, int size);
+    CommandResult executeSpeedCommand(const uint8_t *bytes, int size);
+    CommandResult executeColorCommand(const uint8_t *bytes, int size);
+    CommandResult executeModeCommand(const uint8_t *bytes, int size);
 public:
     CommandExecutor(LedStrip* ledStrip) {this->ledStrip = ledStrip;};
     CommandResult executeCommand(const uint8_t *bytes, int size);

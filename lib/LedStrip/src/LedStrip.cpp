@@ -37,6 +37,15 @@ void LedStrip::turnOff(bool testing)
 }
 
 
+void LedStrip::setTurnOffTimer(Timer *timer)
+{
+    if (hasTurnOffTimer()) {
+        clearTurnOffTimer();
+    }
+    this->timer = timer;
+}
+
+
 bool LedStrip::isTimeToRedraw()
 {
     if (this->iterationsRemainedToRedraw > 0) {

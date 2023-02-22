@@ -42,7 +42,7 @@ void testLedstripTurnOffTimer()
     ledStrip.setTurnOffTimer(new Timer(60));
     TEST_ASSERT_TRUE(ledStrip.hasTurnOffTimer() == true);
     TEST_ASSERT_TRUE(ledStrip.getTimer() != nullptr);
-    ledStrip.clearTurnOffTime();
+    ledStrip.clearTurnOffTimer();
     TEST_ASSERT_TRUE(ledStrip.hasTurnOffTimer() == false);
     TEST_ASSERT_TRUE(ledStrip.getTimer() == nullptr);
 }

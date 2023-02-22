@@ -39,8 +39,8 @@ public:
     // Timer
     Timer* getTimer() const {return this->timer;};
     bool hasTurnOffTimer() const {return this->timer;};
-    void setTurnOffTimer(Timer* timer) {this->timer = timer;};
-    void clearTurnOffTime() {delete this->timer; this->timer = nullptr;};
+    void setTurnOffTimer(Timer* timer);
+    void clearTurnOffTimer() {delete this->timer; this->timer = nullptr;};
 
     // Settings
     uint8_t getBrightness() {return this->brightness;};

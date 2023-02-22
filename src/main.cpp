@@ -5,25 +5,14 @@
 #include "Timer.hpp"
 #include "Protocol.hpp"
 #include "settings.hpp"
+#include "Debug.hpp"
 
 
-// GLOBALS
 LedStrip *ledStrip;
 Remote *remote;
 
-
-struct ByteHex
-{
-    char h;
-    char l;
-};
-
-
-// FUNCTIONS
 void executeCommandEntry(const uint8_t *bytes, int size);
 void executePowerCommand(const uint8_t *bytes, int size);
-void debugPrint(const uint8_t *bytes, int size);
-ByteHex byteToHex(uint8_t byte);
 
 
 void setup()
@@ -40,7 +29,7 @@ void loop()
     if (remote->receiveAvailablePacket()) {
         executeCommandEntry(remote->getPacketBytes(), PACKET_SIZE);
         if (DEBUG_PRINT) {
-            debugPrint(remote->getPacketBytes(), PACKET_SIZE);
+            debugPrint(Serial, remote->getPacketBytes(), PACKET_SIZE);
         }
     }
     if (ledStrip->isOn()) {
@@ -123,33 +112,3 @@ void executePowerCommand(const uint8_t *bytes, int size)
             break;
     }
 }
-
-
-void debugPrint(const uint8_t *bytes, int size)
-{
-    Serial.println("=== DEBUG ===");
-    Serial.write("Packet size: ");
-    Serial.write(size + 48);
-    Serial.write('\n');
-
-    for (int i = 0; i < size; i++) {
-        Serial.write("Byte ");
-        Serial.write(i + 48);
-        Serial.write(": ");
-        ByteHex byteHex = byteToHex(bytes[i]);
-        Serial.write(byteHex.h); Serial.write(byteHex.l); 
-        Serial.write('\n');
-    }
-    Serial.println("=== END OF DEBUG ===");
-}
-
-
-ByteHex byteToHex(uint8_t byte)
-{
-    static char const hex[16] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B','C','D','E','F'};
-    ByteHex byteHex;
-    byteHex.h = hex[(byte & 0xF0) >> 4];
-    byteHex.l = hex[(byte & 0x0F)];
-    return byteHex;
-}
-

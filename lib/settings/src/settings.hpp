@@ -9,12 +9,12 @@
 #define REFERENCE_VOLATAGE          5           // reference voltage of power supply of your scheme (V)
 #define CURRENT_LIMIT               1000        // limit current consuption (mA)    
 #define START_COLOR                 80, 80, 80  // start led strip color (r, g, b)
-#define PRINT_DEBUG                 true        // wether to print packet data to Serial
 #define MIN_SPEED_ITERATIONS        1000000     // count of iterations to redraw frame on minimal speed (more iterations -> more slow)
 #define MAX_SPEED_ITERATIONS        1000        // count of iterations to redraw frame on maximum speed
 
 
-// FEEDBACK MESSAGES
+// MESSAGES
+#define PRINT_DEBUG             false           // wether to print packet data to Serial
 #define PRINT_FEEDBACK          true            // wether to print feedback messages to serial port
 #define MAX_MESSAGE_LENGTH      40              // length of the most long feedback message  
 #define TOO_SHORT_PACKET_MSG    "Received packet is too short"

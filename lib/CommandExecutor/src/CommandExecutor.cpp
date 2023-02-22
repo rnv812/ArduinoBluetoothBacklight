@@ -60,9 +60,8 @@ CommandResult CommandExecutor::executeTimerCommand(const uint8_t *bytes, int siz
             if (!this->ledStrip->hasTurnOffTimer()) {
                 return CommandResult(NO_TIMER_MSG, false);
             }
-            Timer* timer = this->ledStrip->getTimer();
-            timer->decreaseMinutes(bytes[2]);
-            if (timer->isExpired()) {
+            this->ledStrip->getTimer()->decreaseMinutes(bytes[2]);
+            if (this->ledStrip->getTimer()->isExpired()) {
                 this->ledStrip->clearTurnOffTimer();
                 return CommandResult(CLEAR_TIMER_MSG, true); 
             }

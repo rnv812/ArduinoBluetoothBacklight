@@ -29,6 +29,7 @@ void setup()
 
 void loop()
 {
+    // receive command from remote
     if (remote->receiveAvailablePacket()) {
         if (PRINT_DEBUG) {
             debugPrint(Serial, remote->getPacketBytes(), PACKET_SIZE);
@@ -42,6 +43,8 @@ void loop()
             remote->sendMessage(result.message);
         }
     }
+
+    // draw frame on led strip
     if (ledStrip->isOn()) {
         ledStrip->draw();
     }

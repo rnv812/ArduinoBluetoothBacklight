@@ -37,14 +37,24 @@ void LedStrip::turnOff(bool testing)
 }
 
 
-void LedStrip::draw()
+bool LedStrip::isTimeToRedraw()
 {
     if (this->iterationsRemainedToRedraw > 0) {
         this->iterationsRemainedToRedraw--;
-        return;
+        return false;
     }
     else {
         this->iterationsRemainedToRedraw = getActualIterationsToRedraw();
+        return true;
+    }
+}
+
+
+
+void LedStrip::draw()
+{
+    if(!isTimeToRedraw()) {
+        return;
     }
 
     switch (this->mode)

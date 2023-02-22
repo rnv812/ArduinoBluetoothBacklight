@@ -18,6 +18,7 @@ private:
     AnimationModes mode;
     unsigned int iterationsRemainedToRedraw;
     unsigned int getActualIterationsToRedraw();
+    bool isTimeToRedraw();
 
     // Dynamic properties
     uint8_t dynBrightness;

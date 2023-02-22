@@ -78,7 +78,7 @@ Speed:
 - `2` - increase speed by `n`
 
 ### Examples of bytes sequences
-- `0x00 0x01 0x00 0x00 0x00` - will turn in the strip, because the first byte is **Power** comand code and the second byte is **turn on strip** command argument;
+- `0x00 0x01 0x00 0x00 0x00` - will turn on the strip, because the first byte is **Power** comand code and the second byte is **turn on strip** command argument;
 - `0x02 0xFF 0xFF 0xFF 0x00` - will set active color to white, because the first byte is **Color** comand code, next three bytes are **hex representation of color** and last byte is **set color to** argument interpretation.
 
 ## Notes

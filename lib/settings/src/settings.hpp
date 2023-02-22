@@ -16,7 +16,6 @@
 // MESSAGES
 #define PRINT_DEBUG             false           // wether to print packet data to Serial
 #define PRINT_FEEDBACK          true            // wether to print feedback messages to serial port
-#define MAX_MESSAGE_LENGTH      40              // length of the most long feedback message  
 #define TOO_SHORT_PACKET_MSG    "Received packet is too short"
 #define POWER_OFF_MSG           "Power is off"
 #define POWER_ON_MSG            "Power is on"

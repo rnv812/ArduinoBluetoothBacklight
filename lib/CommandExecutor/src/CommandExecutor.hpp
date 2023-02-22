@@ -19,6 +19,6 @@ private:
     CommandResult executePowerCommand(const uint8_t *bytes, int size);
 public:
     CommandExecutor(LedStrip* ledStrip) {this->ledStrip = ledStrip;};
-    CommandResult executeCommandEntry(const uint8_t *bytes, int size);
+    CommandResult executeCommand(const uint8_t *bytes, int size);
 };
 

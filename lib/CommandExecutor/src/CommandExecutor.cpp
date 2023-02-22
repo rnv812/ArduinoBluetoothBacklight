@@ -1,7 +1,7 @@
 #include "CommandExecutor.hpp"
 
 
-CommandResult CommandExecutor::executeCommandEntry(const uint8_t *bytes, int size)
+CommandResult CommandExecutor::executeCommand(const uint8_t *bytes, int size)
 {
     if (size < DEFAULT_PROTOCOL_PACKET_SIZE) {
         return CommandResult(TOO_SHORT_PACKET_MSG, false);

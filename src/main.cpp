@@ -33,7 +33,7 @@ void loop()
         if (PRINT_DEBUG) {
             debugPrint(Serial, remote->getPacketBytes(), PACKET_SIZE);
         }
-        CommandResult result = commandExecutor->executeCommandEntry(remote->getPacketBytes(), PACKET_SIZE);
+        CommandResult result = commandExecutor->executeCommand(remote->getPacketBytes(), PACKET_SIZE);
 
         if (!result.status) {
             remote->waitExtraBytesAndClear();

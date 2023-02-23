@@ -95,15 +95,29 @@ void LedStrip::regular()
 
 void LedStrip::breathing()
 {
+    const static unsigned int iterationsPeriod = 255;
+    const double brightnessStep = this->brightness / (double)iterationsPeriod; 
+    
     static uint8_t brightnessReduction;
     static bool directionUp;
+    
+    static double accumulator;
 
-    if (brightnessReduction == this->brightness) {
+    if (accumulator < 1) {
+        accumulator += brightnessStep;
+        return;
+    }
+    else {
+        accumulator = 0;
+    }
+
+    if (brightnessReduction >= this->brightness) {
         directionUp = true;
     }
     else if (brightnessReduction == 0) {
         directionUp = false;
     }
+
 
     if (directionUp) {
         brightnessReduction--;  // decreasing of brightnes reduction -> increasing brightness (direction up)

@@ -2,28 +2,24 @@
 #include "FastLED.h"
 #include "Remote.hpp"
 #include "LedStrip.hpp"
-#include "Timer.hpp"
-#include "Protocol.hpp"
+#include "CommandExecutor.hpp"
 #include "settings.hpp"
 #include "Debug.hpp"
-#include "CommandExecutor.hpp"
 
 
 LedStrip *ledStrip;
 Remote *remote;
 CommandExecutor *commandExecutor;
 
-void executeCommandEntry(const uint8_t *bytes, int size);
-void executePowerCommand(const uint8_t *bytes, int size);
-
 
 void setup()
 {
     Serial.begin(9600);
     ledStrip = new LedStrip();
-    ledStrip->setMaxCurrent(CURRENT_LIMIT);
     remote = new Remote(Serial);
     commandExecutor = new CommandExecutor(ledStrip);
+    
+    ledStrip->setMaxCurrent(CURRENT_LIMIT);
 }
 
 

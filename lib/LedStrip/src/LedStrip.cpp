@@ -17,9 +17,6 @@ LedStrip::LedStrip() : controller(FastLED), color(CRGB(START_COLOR))
     // dynamics 
     this->iterationsRemainedToRedraw = getActualIterationsToRedraw();
     this->dynBrightness = this->brightness;
-
-    // static
-    fill_rainbow(this->rainbow_gradient, 256, 0, 1);
 }
 
 
@@ -62,7 +59,6 @@ bool LedStrip::isTimeToRedraw()
 }
 
 
-
 void LedStrip::draw()
 {
     if(!isTimeToRedraw()) {
@@ -99,7 +95,9 @@ void LedStrip::regular()
 void LedStrip::morphing_color()
 {
     static uint8_t gradientIteration;
-    this->controller.showColor(this->rainbow_gradient[gradientIteration++], this->brightness);
+    CRGB color;
+    hsv2rgb_rainbow(CHSV(gradientIteration++, 255, 255), color);
+    this->controller.showColor(color, this->brightness);
 }
 
 

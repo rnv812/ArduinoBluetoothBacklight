@@ -1,7 +1,7 @@
 #pragma once
 #include "FastLED.h"
 #include "Timer.hpp"
-#include "Protocol.hpp"
+#include "protocol.hpp"
 #include "settings.hpp"
 #include <math.h>
 
@@ -20,9 +20,6 @@ private:
     unsigned int iterationsRemainedToRedraw;
     unsigned int getActualIterationsToRedraw();
     bool isTimeToRedraw();
-
-    // Static
-    CRGB rainbow_gradient[256];
 
     // Dynamic properties
     uint8_t dynBrightness;

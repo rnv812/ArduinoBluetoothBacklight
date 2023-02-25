@@ -4,7 +4,7 @@
 #include "LedStrip.hpp"
 #include "CommandExecutor.hpp"
 #include "settings.hpp"
-#include "Debug.hpp"
+#include "debug.hpp"
 
 
 LedStrip *ledStrip;

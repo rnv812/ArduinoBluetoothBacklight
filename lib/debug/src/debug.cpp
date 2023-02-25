@@ -1,4 +1,4 @@
-#include "Debug.hpp"
+#include "debug.hpp"
 
 
 void debugPrint(HardwareSerial& serial, const uint8_t *bytes, int size)

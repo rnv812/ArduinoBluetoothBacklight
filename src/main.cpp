@@ -12,13 +12,15 @@ Remote *remote;
 CommandExecutor *commandExecutor;
 
 
+void recreate_objects();
+
+
 void setup()
 {
     Serial.begin(9600);
-    ledStrip = new LedStrip();
-    remote = new Remote(Serial);
-    commandExecutor = new CommandExecutor(ledStrip);
-    
+
+    recreate_objects();
+
     ledStrip->setMaxCurrent(CURRENT_LIMIT);
 }
 
@@ -44,4 +46,16 @@ void loop()
     if (ledStrip->isOn()) {
         ledStrip->draw();
     }
+}
+
+
+void recreate_objects()
+{
+    delete ledStrip;
+    delete remote;
+    delete commandExecutor;
+
+    ledStrip = new LedStrip();
+    remote = new Remote(Serial);
+    commandExecutor = new CommandExecutor(ledStrip);
 }

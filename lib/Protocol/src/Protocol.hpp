@@ -21,7 +21,7 @@ enum class PowerArgs {
 
 enum class AnimationModes {
     REGULAR = 0,
-    BREATHING = 1,
+    MORPHING_COLOR = 1,
     
     // for cheking when type casting
     END = 2

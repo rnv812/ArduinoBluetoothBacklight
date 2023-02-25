@@ -21,11 +21,15 @@ private:
     unsigned int getActualIterationsToRedraw();
     bool isTimeToRedraw();
 
+    // Static
+    CRGB rainbow_gradient[256];
+
     // Dynamic properties
     uint8_t dynBrightness;
 
     // Animation modes
     void regular();
+    void morphing_color();
     void breathing();
 public:
     LedStrip();

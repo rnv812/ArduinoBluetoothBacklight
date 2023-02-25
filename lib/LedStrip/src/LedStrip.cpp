@@ -17,6 +17,9 @@ LedStrip::LedStrip() : controller(FastLED), color(CRGB(START_COLOR))
     // dynamics 
     this->iterationsRemainedToRedraw = getActualIterationsToRedraw();
     this->dynBrightness = this->brightness;
+
+    // static
+    fill_rainbow(this->rainbow_gradient, 256, 0, 1);
 }
 
 
@@ -71,8 +74,8 @@ void LedStrip::draw()
     case AnimationModes::REGULAR:
         regular();
         break;
-    case AnimationModes::BREATHING:
-        breathing();
+    case AnimationModes::MORPHING_COLOR:
+        morphing_color();
         break;
     default:
         break;
@@ -90,6 +93,13 @@ unsigned int LedStrip::getActualIterationsToRedraw()
 void LedStrip::regular()
 {
     this->controller.showColor(this->color, this->brightness);
+}
+
+
+void LedStrip::morphing_color()
+{
+    static uint8_t gradientIteration;
+    this->controller.showColor(this->rainbow_gradient[gradientIteration++], this->brightness);
 }
 
 

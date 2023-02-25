@@ -43,14 +43,13 @@ Argument of command `1` (Brightness):
 - `n` - set peak brightness to `n` (0 - 255)
 
 Argument of command `2` (Color):
-- `r`, `g`, `b` - hex representation of color
+- `h`, `s`, `v` - hex representation of color in HSV model
   
 Argument of command `3` (Speed):
 - `n` - set speed to `n` (0 - 255)
 
 Argument of command `4` (Mode):
 - `0` - regular
-- `1` - breathing (fade in / fade out)
 - ...
 - For more modes see enumeration `AnimationModes` in `Protocol.h`
 
@@ -68,9 +67,9 @@ Brightness:
 - `2` - increase brightnes by `n`
 
 Color:
-- `0` - set color to `r`, `g`, `b`
-- `1` - decrease color by `r`, `g`, `b`
-- `2` - increase color by `r`, `g`, `b`
+- `0` - set color to `h`, `s`, `v`
+- `1` - decrease color by `h`, `s`, `v`
+- `2` - increase color by `h`, `s`, `v`
 
 Speed:
 - `0` - set speed to `n`

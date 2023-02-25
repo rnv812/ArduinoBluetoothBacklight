@@ -8,7 +8,7 @@
 #define LEDS_CONTROLLER             WS2812B     // leds controller (For more see FastLed documentation)
 #define REFERENCE_VOLATAGE          5           // reference voltage of power supply of your scheme (V)
 #define CURRENT_LIMIT               1000        // limit current consuption (mA)    
-#define START_COLOR                 80, 80, 80  // start led strip color (r, g, b)
+#define START_HUE                   128         // start led strip color, hue in range 0-255
 #define MIN_SPEED_ITERATIONS        4000        // count of iterations to redraw frame on minimal speed (more iterations -> more slow)
 #define MAX_SPEED_ITERATIONS        1000        // count of iterations to redraw frame on maximum speed
 

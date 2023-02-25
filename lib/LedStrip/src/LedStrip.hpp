@@ -14,7 +14,7 @@ private:
     bool statusOn;
     Timer* timer;
     uint8_t brightness;
-    CRGB color;
+    CHSV color;
     uint8_t speed;
     AnimationModes mode;
     unsigned int iterationsRemainedToRedraw;
@@ -26,8 +26,7 @@ private:
 
     // Animation modes
     void regular();
-    void morphing_color();
-    void breathing();
+    void morphing_rainbow();
 public:
     LedStrip();
     ~LedStrip();
@@ -49,10 +48,10 @@ public:
     void decreaseBrightness(uint8_t level) {this->brightness = max(this->brightness - level, 0);};
     void increaseBrightness(uint8_t level) {this->brightness = min(this->brightness + level, 255);};
     
-    CRGB getColor() {return this->color;};
-    void setColor(const CRGB& color) {this->color = color;};
-    void decreaseColor(const CRGB& color) {this->color -= color;};
-    void increaseColor(const CRGB& color) {this->color += color;};
+    CHSV getColor() {return this->color;};
+    void setColor(const CHSV& color) {this->color = color;};
+    void decreaseColor(const CHSV& color);
+    void increaseColor(const CHSV& color);
 
     uint8_t getSpeed() {return this->speed;};
     void setSpeed(uint8_t level) {this->speed = level;};

@@ -117,7 +117,7 @@ CommandResult CommandExecutor::executeSpeedCommand(const uint8_t *bytes, int siz
 
 CommandResult CommandExecutor::executeColorCommand(const uint8_t *bytes, int size)
 {
-    CRGB color(bytes[1], bytes[2], bytes[3]);
+    CHSV color(bytes[1], bytes[2], bytes[3]);
     switch ((ArgumentActions)bytes[4]) {
         case ArgumentActions::SET:
             ledStrip->setColor(color);

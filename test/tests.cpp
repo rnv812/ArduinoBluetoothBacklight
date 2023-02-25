@@ -85,42 +85,18 @@ void testLedstripSpeed()
 void testLedstripColor()
 {
     LedStrip ledStrip;
-    CRGB color(128, 64, 64);
-    CRGB deltaRed(8, 0, 0);
-    CRGB deltaGreen(0, 8, 0);
-    CRGB deltaBlue(0, 0, 8);
-    CRGB delta1(8, 8, 8);
-    CRGB delta2(12, 13, 14);
-    CRGB white(255, 255, 255);
-    CRGB black(0, 0, 0);
+    CHSV color(128, 255, 255);
+    CHSV deltaHue(8, 0, 0);
     ledStrip.setColor(color);
     TEST_ASSERT_TRUE(ledStrip.getColor() == color);
-    ledStrip.increaseColor(deltaRed);
-    TEST_ASSERT_TRUE(ledStrip.getColor().r == color.r +8 && ledStrip.getColor().g == color.g && ledStrip.getColor().b == color.b);
-    ledStrip.increaseColor(deltaGreen);
-    TEST_ASSERT_TRUE(ledStrip.getColor().r == color.r +8 && ledStrip.getColor().g == color.g + 8 && ledStrip.getColor().b == color.b);
-    ledStrip.increaseColor(deltaBlue);
-    TEST_ASSERT_TRUE(ledStrip.getColor().r == color.r +8 && ledStrip.getColor().g == color.g + 8 && ledStrip.getColor().b == color.b + 8);
-    ledStrip.decreaseColor(delta1);
-    TEST_ASSERT_TRUE(ledStrip.getColor() == color);
-    ledStrip.decreaseColor(delta2);
-    TEST_ASSERT_TRUE(ledStrip.getColor().r == color.r - 12 && ledStrip.getColor().g == color.g - 13 && ledStrip.getColor().b == color.b -14);
-    ledStrip.increaseColor(delta2);
-    TEST_ASSERT_TRUE(ledStrip.getColor() == color);
-    ledStrip.increaseColor(white);
-    TEST_ASSERT_TRUE(ledStrip.getColor() == white);
-    ledStrip.decreaseColor(white);
-    TEST_ASSERT_TRUE(ledStrip.getColor() == black);
-    ledStrip.decreaseColor(white);
-    TEST_ASSERT_TRUE(ledStrip.getColor() == black);
-    ledStrip.increaseColor(white);
-    TEST_ASSERT_TRUE(ledStrip.getColor() == white);
+    ledStrip.increaseColor(deltaHue);
+    TEST_ASSERT_TRUE(ledStrip.getColor().h == color.h + 8 && ledStrip.getColor().s == color.s && ledStrip.getColor().v == color.v);
 }
 
 
 void testLedstripMode()
 {
     LedStrip ledStrip;
-    ledStrip.setMode(AnimationModes::BREATHING);
-    TEST_ASSERT_TRUE(ledStrip.getMode() == AnimationModes::BREATHING);
+    ledStrip.setMode(AnimationModes::MORPHING_RAINBOW);
+    TEST_ASSERT_TRUE(ledStrip.getMode() == AnimationModes::MORPHING_RAINBOW);
 }

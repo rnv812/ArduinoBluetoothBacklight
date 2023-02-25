@@ -1,7 +1,7 @@
 #include "LedStrip.hpp"
 
 
-LedStrip::LedStrip() : controller(FastLED), color(CRGB(START_COLOR))
+LedStrip::LedStrip() : controller(FastLED), color(CHSV(START_HUE, 255, 255))
 {   
     // leds
     this->numLeds = NUM_LEDS;
@@ -46,6 +46,22 @@ void LedStrip::setTurnOffTimer(Timer *timer)
 }
 
 
+void LedStrip::decreaseColor(const CHSV &color)
+{
+    this->color.h -= color.h;
+    this->color.s = max(this->color.s - color.h, 0);
+    this->color.v = max(this->color.v - color.v, 0);
+}
+
+
+void LedStrip::increaseColor(const CHSV &color)
+{
+    this->color.h += color.h;
+    this->color.s = min(this->color.s + color.s, 255);
+    this->color.v = min(this->color.v + color.v, 255);
+}
+
+
 bool LedStrip::isTimeToRedraw()
 {
     if (this->iterationsRemainedToRedraw > 0) {
@@ -70,8 +86,8 @@ void LedStrip::draw()
     case AnimationModes::REGULAR:
         regular();
         break;
-    case AnimationModes::MORPHING_COLOR:
-        morphing_color();
+    case AnimationModes::MORPHING_RAINBOW:
+        morphing_rainbow();
         break;
     default:
         break;
@@ -88,51 +104,16 @@ unsigned int LedStrip::getActualIterationsToRedraw()
 
 void LedStrip::regular()
 {
-    this->controller.showColor(this->color, this->brightness);
+    CRGB color;
+    hsv2rgb_rainbow(this->color, color);
+    this->controller.showColor(color, this->brightness);
 }
 
 
-void LedStrip::morphing_color()
+void LedStrip::morphing_rainbow()
 {
     static uint8_t gradientIteration;
     CRGB color;
     hsv2rgb_rainbow(CHSV(gradientIteration++, 255, 255), color);
     this->controller.showColor(color, this->brightness);
-}
-
-
-void LedStrip::breathing()
-{
-    const static unsigned int iterationsPeriod = 255;
-    const double brightnessStep = this->brightness / (double)iterationsPeriod; 
-    
-    static uint8_t brightnessReduction;
-    static bool directionUp;
-    
-    static double accumulator;
-
-    if (accumulator < 1) {
-        accumulator += brightnessStep;
-        return;
-    }
-    else {
-        accumulator = 0;
-    }
-
-    if (brightnessReduction >= this->brightness) {
-        directionUp = true;
-    }
-    else if (brightnessReduction == 0) {
-        directionUp = false;
-    }
-
-
-    if (directionUp) {
-        brightnessReduction--;  // decreasing of brightnes reduction -> increasing brightness (direction up)
-    }
-    else {
-        brightnessReduction++;
-    }
-    
-    this->controller.showColor(this->color, this->brightness - brightnessReduction);
 }

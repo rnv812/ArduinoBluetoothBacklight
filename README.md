@@ -65,7 +65,7 @@ As sender app, I recommend [Serial Bluetooth Terminal](https://play.google.com/s
 
 Use [this configuration file](./bluetooth/keyboard_config.txt) to get your app keyboard looks like on picture below.
 
-<img src="./bluetooth/demo_keyboard.jpg" height="500px" />
+<img src="./bluetooth/keyboard_demo.jpg" height="500px" />
 
 
  

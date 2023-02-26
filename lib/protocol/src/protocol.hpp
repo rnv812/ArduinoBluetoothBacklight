@@ -4,18 +4,18 @@
 
 enum class CommandCodes {
     POWER = 0,
-    BRIGHTNESS = 1,
-    COLOR = 2,
-    SPEED = 3,
-    MODE = 4
+    HUE = 1,
+    SATURATION = 2,
+    BRIGHTNESS = 3,
+    SPEED = 4,
+    MODE = 5,
+    TIMER = 6
 };
 
 
 enum class PowerArgs {
     OFF = 0,
     ON = 1,
-    SET_OFFTIMER = 2,
-    CLEAR_OFFTIMER = 3
 };
 
 
@@ -31,5 +31,6 @@ enum class AnimationModes {
 enum class ArgumentActions {
     SET = 0,
     DECREASE = 1,
-    INCREASE = 2
+    INCREASE = 2,
+    CLEAR = 3
 };

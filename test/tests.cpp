@@ -4,21 +4,19 @@
 
 
 void testLedstripPower();
-void testLedstripTurnOffTimer();
-void testLedstripBrightness();
+void testLedstripHSV();
 void testLedstripSpeed();
-void testLedstripColor();
 void testLedstripMode();
+void testLedstripTurnOffTimer();
 
 
 int main( int argc, char **argv) {
     UNITY_BEGIN();
     RUN_TEST(testLedstripPower);
-    RUN_TEST(testLedstripTurnOffTimer);
-    RUN_TEST(testLedstripBrightness);
+    RUN_TEST(testLedstripHSV);
     RUN_TEST(testLedstripSpeed);
-    RUN_TEST(testLedstripColor);
     RUN_TEST(testLedstripMode);
+    RUN_TEST(testLedstripTurnOffTimer);
     UNITY_END();
 }
 
@@ -34,33 +32,24 @@ void testLedstripPower()
 }
 
 
-void testLedstripTurnOffTimer()
+void testLedstripHSV()
 {
     LedStrip ledStrip;
-    TEST_ASSERT_TRUE(ledStrip.hasTurnOffTimer() == false);
-    TEST_ASSERT_TRUE(ledStrip.getTimer() == nullptr);
-    ledStrip.setTurnOffTimer(new Timer(60));
-    TEST_ASSERT_TRUE(ledStrip.hasTurnOffTimer() == true);
-    TEST_ASSERT_TRUE(ledStrip.getTimer() != nullptr);
-    ledStrip.clearTurnOffTimer();
-    TEST_ASSERT_TRUE(ledStrip.hasTurnOffTimer() == false);
-    TEST_ASSERT_TRUE(ledStrip.getTimer() == nullptr);
-}
-
-
-void testLedstripBrightness()
-{
-    LedStrip ledStrip;
-    ledStrip.setBrightness(13);
-    TEST_ASSERT_TRUE(ledStrip.getBrightness() == 13);
-    ledStrip.increaseBrightness(2);
-    TEST_ASSERT_TRUE(ledStrip.getBrightness() == 15);
-    ledStrip.increaseBrightness(250);
-    TEST_ASSERT_TRUE(ledStrip.getBrightness() == 255);
-    ledStrip.decreaseBrightness(254);
-    TEST_ASSERT_TRUE(ledStrip.getBrightness() == 1);
-    ledStrip.decreaseBrightness(10);
-    TEST_ASSERT_TRUE(ledStrip.getBrightness() == 0);
+    CHSV color(128, 128, 128);
+    ledStrip.setColor(color);
+    TEST_ASSERT_TRUE(ledStrip.getColor() == color);
+    ledStrip.increaseHue(8);
+    TEST_ASSERT_TRUE(ledStrip.getColor().h == color.h + 8 && ledStrip.getColor().s == color.s && ledStrip.getColor().v == color.v);
+    ledStrip.increaseSaturation(8);
+    TEST_ASSERT_TRUE(ledStrip.getColor().h == color.h + 8 && ledStrip.getColor().s == color.s + 8 && ledStrip.getColor().v == color.v);
+    ledStrip.increaseBrightness(8);
+    TEST_ASSERT_TRUE(ledStrip.getColor().h == color.h + 8 && ledStrip.getColor().s == color.s +8 && ledStrip.getColor().v == color.v + 8);
+    ledStrip.decreaseHue(8);
+    TEST_ASSERT_TRUE(ledStrip.getColor().h == color.h && ledStrip.getColor().s == color.s +8 && ledStrip.getColor().v == color.v + 8);
+    ledStrip.decreaseSaturation(8);
+    TEST_ASSERT_TRUE(ledStrip.getColor().h == color.h && ledStrip.getColor().s == color.s && ledStrip.getColor().v == color.v + 8);
+    ledStrip.decreaseBrightness(8);
+    TEST_ASSERT_TRUE(ledStrip.getColor() == color);
 }
 
 
@@ -82,16 +71,7 @@ void testLedstripSpeed()
 }
 
 
-void testLedstripColor()
-{
-    LedStrip ledStrip;
-    CHSV color(128, 255, 255);
-    CHSV deltaHue(8, 0, 0);
-    ledStrip.setColor(color);
-    TEST_ASSERT_TRUE(ledStrip.getColor() == color);
-    ledStrip.increaseColor(deltaHue);
-    TEST_ASSERT_TRUE(ledStrip.getColor().h == color.h + 8 && ledStrip.getColor().s == color.s && ledStrip.getColor().v == color.v);
-}
+
 
 
 void testLedstripMode()
@@ -99,4 +79,18 @@ void testLedstripMode()
     LedStrip ledStrip;
     ledStrip.setMode(AnimationModes::MORPHING_RAINBOW);
     TEST_ASSERT_TRUE(ledStrip.getMode() == AnimationModes::MORPHING_RAINBOW);
+}
+
+
+void testLedstripTurnOffTimer()
+{
+    LedStrip ledStrip;
+    TEST_ASSERT_TRUE(ledStrip.hasTurnOffTimer() == false);
+    TEST_ASSERT_TRUE(ledStrip.getTimer() == nullptr);
+    ledStrip.setTurnOffTimer(new Timer(60));
+    TEST_ASSERT_TRUE(ledStrip.hasTurnOffTimer() == true);
+    TEST_ASSERT_TRUE(ledStrip.getTimer() != nullptr);
+    ledStrip.clearTurnOffTimer();
+    TEST_ASSERT_TRUE(ledStrip.hasTurnOffTimer() == false);
+    TEST_ASSERT_TRUE(ledStrip.getTimer() == nullptr);
 }

@@ -1,7 +1,7 @@
 #include "LedStrip.hpp"
 
 
-LedStrip::LedStrip() : controller(FastLED), color(CHSV(START_HUE, 255, 255))
+LedStrip::LedStrip() : controller(FastLED), color(CHSV(START_HUE, 255, START_BRIGHTNESS))
 {   
     // leds
     this->numLeds = NUM_LEDS;
@@ -10,19 +10,20 @@ LedStrip::LedStrip() : controller(FastLED), color(CHSV(START_HUE, 255, 255))
     // settings
     this->statusOn = true;
     this->timer = nullptr;
-    this->brightness = 128;
-    this->speed = 128;
+    this->speed = START_SPEED;
     this->mode = AnimationModes::REGULAR;
     
-    // dynamics 
+    // displaying
     this->iterationsRemainedToRedraw = getActualIterationsToRedraw();
-    this->dynBrightness = this->brightness;
 }
 
 
 LedStrip::~LedStrip()
 {
     delete[] this->controller.leds();
+    if (this->timer != nullptr) {
+        delete this->timer;
+    }
 }
 
 
@@ -32,7 +33,6 @@ void LedStrip::turnOff(bool testing)
     if (!testing) {
         this->controller.showColor(CRGB::Black, 0);
     }
-
     this->statusOn = false;
 }
 
@@ -46,19 +46,12 @@ void LedStrip::setTurnOffTimer(Timer *timer)
 }
 
 
-void LedStrip::decreaseColor(const CHSV &color)
+void LedStrip::clearTurnOffTimer()
 {
-    this->color.h -= color.h;
-    this->color.s = max(this->color.s - color.h, 0);
-    this->color.v = max(this->color.v - color.v, 0);
-}
-
-
-void LedStrip::increaseColor(const CHSV &color)
-{
-    this->color.h += color.h;
-    this->color.s = min(this->color.s + color.s, 255);
-    this->color.v = min(this->color.v + color.v, 255);
+    if (hasTurnOffTimer()) {
+        delete this->timer;
+        this->timer = nullptr;
+    }
 }
 
 
@@ -106,7 +99,7 @@ void LedStrip::regular()
 {
     CRGB color;
     hsv2rgb_rainbow(this->color, color);
-    this->controller.showColor(color, this->brightness);
+    this->controller.showColor(color);
 }
 
 
@@ -114,6 +107,6 @@ void LedStrip::morphing_rainbow()
 {
     static uint8_t gradientIteration;
     CRGB color;
-    hsv2rgb_rainbow(CHSV(gradientIteration++, 255, 255), color);
-    this->controller.showColor(color, this->brightness);
+    hsv2rgb_rainbow(CHSV(gradientIteration++, this->color.s, this->color.v), color);
+    this->controller.showColor(color);
 }

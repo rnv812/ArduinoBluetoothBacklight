@@ -10,14 +10,18 @@ CommandResult CommandExecutor::executeCommand(const uint8_t *bytes, int size)
     switch (bytes[0]) {
         case (uint8_t)CommandCodes::POWER:
             return executePowerCommand(bytes, size);
+        case (uint8_t)CommandCodes::HUE:
+            return executeHueCommand(bytes, size);
+        case (uint8_t)CommandCodes::SATURATION:
+            return executeSaturationCommand(bytes, size);
         case (uint8_t)CommandCodes::BRIGHTNESS:
             return executeBrightnessCommand(bytes, size);
-        case (uint8_t)CommandCodes::COLOR:
-            return executeColorCommand(bytes, size);
         case (uint8_t)CommandCodes::SPEED:
             return executeSpeedCommand(bytes, size);
         case (uint8_t)CommandCodes::MODE:
             return executeModeCommand(bytes, size);
+        case (uint8_t)CommandCodes::TIMER:
+            return executeTimerCommand(bytes, size);
         default:
             return CommandResult(INVALID_COMMAND_MSG, false);
     }
@@ -33,48 +37,44 @@ CommandResult CommandExecutor::executePowerCommand(const uint8_t *bytes, int siz
         case (uint8_t)PowerArgs::ON:
             this->ledStrip->turnOn();
             return CommandResult(POWER_ON_MSG, true);
-        case (uint8_t)PowerArgs::SET_OFFTIMER:
-            return executeTimerCommand(bytes, size);
-        case (uint8_t)PowerArgs::CLEAR_OFFTIMER:
-            if (!this->ledStrip->hasTurnOffTimer()) {
-                return CommandResult(NO_TIMER_MSG, false);
-            }
-            this->ledStrip->clearTurnOffTimer();
-            return CommandResult(CLEAR_TIMER_MSG, true);
         default:
-            return CommandResult(INVALID_POWER_ARG_MSG, false);
+            return CommandResult(INVALID_ARG_MSG, false);
     }
 }
 
 
-CommandResult CommandExecutor::executeTimerCommand(const uint8_t *bytes, int size)
+CommandResult CommandExecutor::executeHueCommand(const uint8_t *bytes, int size)
 {
-    switch ((ArgumentActions)bytes[3]) {
+    switch ((ArgumentActions)bytes[2]) {
         case ArgumentActions::SET:
-            if (this->ledStrip->hasTurnOffTimer()) {
-                return CommandResult(TIMER_ALREADY_SET_MSG, false);
-            }
-            this->ledStrip->setTurnOffTimer(new Timer(bytes[2]));
-            return CommandResult(TIMER_SET_MSG, true);
+            ledStrip->setHue(bytes[1]);
+            return CommandResult(HUE_MSG, true);
         case ArgumentActions::DECREASE:
-            if (!this->ledStrip->hasTurnOffTimer()) {
-                return CommandResult(NO_TIMER_MSG, false);
-            }
-            this->ledStrip->getTimer()->decreaseMinutes(bytes[2]);
-            if (this->ledStrip->getTimer()->isExpired()) {
-                this->ledStrip->clearTurnOffTimer();
-                return CommandResult(CLEAR_TIMER_MSG, true); 
-            }
-            return CommandResult(DECREASE_TIMER_MSG, true);
+            ledStrip->decreaseHue(bytes[1]);
+            return CommandResult(HUE_MSG, true);
         case ArgumentActions::INCREASE:
-            if (!this->ledStrip->hasTurnOffTimer()) {
-                this->ledStrip->setTurnOffTimer(new Timer(bytes[2]));
-                return CommandResult(TIMER_SET_MSG, true);
-            }
-            this->ledStrip->getTimer()->increaseMinutes(bytes[2]);
-            return CommandResult(INCREASE_TIMER_MSG, true);
+            ledStrip->increaseHue(bytes[1]);
+            return CommandResult(HUE_MSG, true);
         default:
-            return CommandResult(INVALID_INTERP_MSG, false);
+            return CommandResult(INVALID_ARG_ACTION_MSG, false);
+    }
+}
+
+
+CommandResult CommandExecutor::executeSaturationCommand(const uint8_t *bytes, int size)
+{
+    switch ((ArgumentActions)bytes[2]) {
+        case ArgumentActions::SET:
+            ledStrip->setSaturation(bytes[1]);
+            return CommandResult(SATURATION_MSG, true);
+        case ArgumentActions::DECREASE:
+            ledStrip->decreaseSaturation(bytes[1]);
+            return CommandResult(SATURATION_MSG, true);
+        case ArgumentActions::INCREASE:
+            ledStrip->increaseSaturation(bytes[1]);
+            return CommandResult(SATURATION_MSG, true);
+        default:
+            return CommandResult(INVALID_ARG_ACTION_MSG, false);
     }
 }
 
@@ -92,7 +92,7 @@ CommandResult CommandExecutor::executeBrightnessCommand(const uint8_t *bytes, in
             ledStrip->increaseBrightness(bytes[1]);
             return CommandResult(BRIGHTNESS_MSG, true);
         default:
-            return CommandResult(INVALID_INTERP_MSG, false);
+            return CommandResult(INVALID_ARG_ACTION_MSG, false);
     }
 }
 
@@ -110,26 +110,7 @@ CommandResult CommandExecutor::executeSpeedCommand(const uint8_t *bytes, int siz
             ledStrip->increaseSpeed(bytes[1]);
             return CommandResult(SPEED_MSG, true);
         default:
-            return CommandResult(INVALID_INTERP_MSG, false);
-    }
-}
-
-
-CommandResult CommandExecutor::executeColorCommand(const uint8_t *bytes, int size)
-{
-    CHSV color(bytes[1], bytes[2], bytes[3]);
-    switch ((ArgumentActions)bytes[4]) {
-        case ArgumentActions::SET:
-            ledStrip->setColor(color);
-            return CommandResult(COLOR_MSG, true);
-        case ArgumentActions::DECREASE:
-            ledStrip->decreaseColor(color);
-            return CommandResult(COLOR_MSG, true);
-        case ArgumentActions::INCREASE:
-            ledStrip->increaseColor(color);
-            return CommandResult(COLOR_MSG, true);
-        default:
-            return CommandResult(INVALID_INTERP_MSG, false);
+            return CommandResult(INVALID_ARG_ACTION_MSG, false);
     }
 }
 
@@ -137,9 +118,31 @@ CommandResult CommandExecutor::executeColorCommand(const uint8_t *bytes, int siz
 CommandResult CommandExecutor::executeModeCommand(const uint8_t *bytes, int size)
 {
     if(bytes[1] >= (uint8_t)AnimationModes::END) {
-        return CommandResult(INVALID_MODE_MSG, false);
+        return CommandResult(INVALID_ARG_MSG, false);
     }
     this->ledStrip->setMode((AnimationModes)bytes[1]);
     return CommandResult(MODE_MSG, true);
         
+}
+
+
+CommandResult CommandExecutor::executeTimerCommand(const uint8_t *bytes, int size)
+{
+    switch ((ArgumentActions)bytes[2]) {
+        case ArgumentActions::SET:
+            this->ledStrip->setTurnOffTimer(new Timer(bytes[1]));
+            return CommandResult(TIMER_SET_MSG, true);
+        case ArgumentActions::INCREASE:
+            if (!this->ledStrip->hasTurnOffTimer()) {
+                this->ledStrip->setTurnOffTimer(new Timer(bytes[1]));
+                return CommandResult(TIMER_SET_MSG, true);
+            }
+            this->ledStrip->getTimer()->increaseMinutes(bytes[1]);
+            return CommandResult(TIMER_INCREASE_MSG, true);
+        case ArgumentActions::CLEAR:
+            this->ledStrip->clearTurnOffTimer();
+            return CommandResult(TIMER_CLEAR_MSG, true);
+        default:
+            return CommandResult(INVALID_ARG_ACTION_MSG, false);
+    }
 }

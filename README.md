@@ -46,14 +46,14 @@ Table of all possible commands and their byte codes:
 | 0x04 | 0xXX | 0x00 | set speed to XX |
 | 0x04 | 0xXX | 0x01 | decrease speed by XX |
 | 0x04 | 0xXX | 0x02 | increase speed by XX |
-| Mode ||||
+| **Mode** ||||
 | 0x05 | 0xXX | Ignored | switch mode to XX |
 | **Timer** ||||
 | 0x06 | 0xXX | 0x00 | set turn off timer to **XX** minutes |
-| 0x06 | 0xXX | 0x01 | decrease turn off timer by **XX** minutes |
 | 0x06 | 0xXX | 0x02 | increase turn off timer by **XX** minutes |
+| 0x06 | Ignored | 0x03 | clear turn off timer |
 
-## Refrences
+## References
 ### Platform
 Project is based on [PlatformIO](https://platformio.org/). I use it as VS Code extension.
 

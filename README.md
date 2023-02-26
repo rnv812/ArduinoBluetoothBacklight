@@ -63,6 +63,9 @@ Project is based on [PlatformIO](https://platformio.org/). I use it as VS Code e
 ### Bluetooth app
 As sender app, I recommend [Serial Bluetooth Terminal](https://play.google.com/store/apps/details?id=de.kai_morich.serial_bluetooth_terminal) by Kai Morich. There you can nicely customize interface so it will look like usual remote. 
 
+Use [this configuration file](./bluetooth/keyboard_config.txt) to get your app keyboard looks like on picture below.
+
+<img src="./bluetooth/demo_keyboard.jpg" height="500px" />
 
 
  

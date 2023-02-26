@@ -15,7 +15,7 @@ struct CommandResult {
 class CommandExecutor
 {
 private:
-    LedStrip* ledStrip;
+    LedStrip& ledStrip;
     CommandResult executePowerCommand(const uint8_t *bytes, int size);
     CommandResult executeHueCommand(const uint8_t *bytes, int size);
     CommandResult executeSaturationCommand(const uint8_t *bytes, int size);
@@ -24,7 +24,7 @@ private:
     CommandResult executeModeCommand(const uint8_t *bytes, int size);
     CommandResult executeTimerCommand(const uint8_t *bytes, int size);
 public:
-    CommandExecutor(LedStrip* ledStrip) {this->ledStrip = ledStrip;};
+    CommandExecutor(LedStrip& ledStrip) : ledStrip(ledStrip) {};
     CommandResult executeCommand(const uint8_t *bytes, int size);
 };
 

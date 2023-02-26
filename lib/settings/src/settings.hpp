@@ -16,7 +16,7 @@
 #define START_MODE                  AnimationModes::REGULAR     // start animation mode
 
 // SPEED
-#define MIN_SPEED_ITERATIONS        4000        // count of iterations to redraw frame on minimal speed (more iterations -> more slow)
+#define MIN_SPEED_ITERATIONS        10000       // count of iterations to redraw frame on minimal speed (more iterations -> more slow)
 #define MAX_SPEED_ITERATIONS        1000        // count of iterations to redraw frame on maximum speed
 
 // REMOTE CONTROL

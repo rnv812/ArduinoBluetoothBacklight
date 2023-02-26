@@ -7,42 +7,37 @@
 #include "debug.hpp"
 
 
-LedStrip *ledStrip;
-Remote *remote;
-CommandExecutor *commandExecutor;
+LedStrip ledStrip;
+Remote remote(Serial);
+CommandExecutor commandExecutor(ledStrip);
 
 
 void setup()
 {
     Serial.begin(9600);
-
-    ledStrip = new LedStrip();
-    remote = new Remote(Serial);
-    commandExecutor = new CommandExecutor(ledStrip);
-
-    ledStrip->setMaxCurrent(CURRENT_LIMIT);
+    ledStrip.setMaxCurrent(CURRENT_LIMIT);
 }
 
 
 void loop()
 {
     // receive command from remote
-    if (remote->receiveAvailablePacket()) {
+    if (remote.receiveAvailablePacket()) {
         if (PRINT_DEBUG) {
-            debugPrint(Serial, remote->getPacketBytes(), PACKET_SIZE);
+            debugPrint(Serial, remote.getPacketBytes(), PACKET_SIZE);
         }
-        CommandResult result = commandExecutor->executeCommand(remote->getPacketBytes(), PACKET_SIZE);
+        CommandResult result = commandExecutor.executeCommand(remote.getPacketBytes(), PACKET_SIZE);
 
         if (!result.status) {
-            remote->waitExtraBytesAndClear();
+            remote.waitExtraBytesAndClear();
         }
         if (PRINT_FEEDBACK) {
-            remote->sendMessage(result.message);
+            remote.sendMessage(result.message);
         }
     }
 
     // draw frame on led strip
-    if (ledStrip->isOn()) {
-        ledStrip->draw();
+    if (ledStrip.isOn()) {
+        ledStrip.draw();
     }
 }

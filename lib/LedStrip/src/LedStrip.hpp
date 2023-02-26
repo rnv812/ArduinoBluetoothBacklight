@@ -3,7 +3,6 @@
 #include "Timer.hpp"
 #include "protocol.hpp"
 #include "settings.hpp"
-#include <math.h>
 
 
 class LedStrip
@@ -16,13 +15,11 @@ private:
     // state
     bool statusOn;
     CHSV color;
-    Timer* timer;
-
-    // settings
     uint8_t speed;
     AnimationModes mode;
+    Timer* timer;
 
-    // redrawing
+    // clocking
     unsigned int iterationsRemainedToRedraw;
     unsigned int getActualIterationsToRedraw();
     bool isTimeToRedraw();
@@ -30,6 +27,7 @@ private:
     // Animation modes
     void regular();
     void morphing_rainbow();
+
 public:
     LedStrip();
     ~LedStrip();
@@ -50,19 +48,19 @@ public:
     
     // saturation
     void setSaturation(uint8_t value) {this->color.s = value;};
-    void decreaseSaturation(uint8_t value) {this->color.s -= value;};
-    void increaseSaturation(uint8_t value) {this->color.s += value;};
+    void decreaseSaturation(uint8_t value) {this->color.s = max(this->color.s - value, 0);};
+    void increaseSaturation(uint8_t value) {this->color.s = min(this->color.s + value, 255);};
 
     // brightness
     void setBrightness(uint8_t value) {this->color.v = value;};
-    void decreaseBrightness(uint8_t value) {this->color.v -= value;};
-    void increaseBrightness(uint8_t value) {this->color.v += value;};
+    void decreaseBrightness(uint8_t value) {this->color.v = max(this->color.v - value, 0);};
+    void increaseBrightness(uint8_t value) {this->color.v = min(this->color.v + value, 255);};
 
     // speed
     uint8_t getSpeed() {return this->speed;};
-    void setSpeed(uint8_t level) {this->speed = level;};
-    void decreaseSpeed(uint8_t level) {this->speed = max(this->speed - level, 0);};
-    void increaseSpeed(uint8_t level) {this->speed = min(this->speed + level, 255);};
+    void setSpeed(uint8_t value) {this->speed = value;};
+    void decreaseSpeed(uint8_t value) {this->speed = max(this->speed - value, 0);};
+    void increaseSpeed(uint8_t value) {this->speed = min(this->speed + value, 255);};
 
     // mode
     AnimationModes getMode() {return this->mode;};

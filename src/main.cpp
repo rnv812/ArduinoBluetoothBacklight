@@ -23,16 +23,18 @@ void loop()
 {
     // receive command from remote
     if (remote.receiveAvailablePacket()) {
-        if (PRINT_DEBUG) {
-            debugPrint(Serial, remote.getPacketBytes(), PACKET_SIZE);
-        }
         CommandResult result = commandExecutor.executeCommand(remote.getPacketBytes(), PACKET_SIZE);
-
         if (!result.status) {
             remote.waitExtraBytesAndClear();
         }
         if (PRINT_FEEDBACK) {
             remote.sendMessage(result.message);
+        }
+        if (PRINT_DEBUG) {
+            debugPrint(Serial, remote.getPacketBytes(), PACKET_SIZE);
+        }
+        if (PRINT_STATE) {
+            printState(Serial, ledStrip.currentState());
         }
     }
 

@@ -87,6 +87,26 @@ void LedStrip::draw()
     }
 }
 
+StripState LedStrip::currentState() const
+{
+    StripState state;
+    state.isOn = this->statusOn;
+    state.hue = this->color.h;
+    state.saturation = this->color.s;
+    state.brightness = this->color.v;
+    state.speed = this->speed;
+    state.mode = (uint8_t)this->mode;
+    if (hasTurnOffTimer()) {
+        state.timerOn = true;
+        state.timerMinutes = this->timer->minutesRemain();
+    }
+    else {
+        state.timerOn = false;
+        state.timerMinutes = 0;
+    }
+    return state;
+}
+
 
 unsigned int LedStrip::getActualIterationsToRedraw()
 {

@@ -5,6 +5,18 @@
 #include "settings.hpp"
 
 
+struct StripState {
+    bool isOn;
+    uint8_t hue;
+    uint8_t saturation;
+    uint8_t brightness;
+    uint8_t speed;
+    uint8_t mode;
+    bool timerOn;
+    uint8_t timerMinutes;
+};
+
+
 class LedStrip
 {
 private:
@@ -38,7 +50,7 @@ public:
     void turnOff(bool testing=false);
     
     // color
-    CHSV getColor() {return this->color;};
+    CHSV getColor() const {return this->color;};
     void setColor(const CHSV& color) {this->color = color;};
     
     // hue
@@ -57,13 +69,13 @@ public:
     void increaseBrightness(uint8_t value) {this->color.v = min(this->color.v + value, 255);};
 
     // speed
-    uint8_t getSpeed() {return this->speed;};
+    uint8_t getSpeed() const {return this->speed;};
     void setSpeed(uint8_t value) {this->speed = value;};
     void decreaseSpeed(uint8_t value) {this->speed = max(this->speed - value, 0);};
     void increaseSpeed(uint8_t value) {this->speed = min(this->speed + value, 255);};
 
     // mode
-    AnimationModes getMode() {return this->mode;};
+    AnimationModes getMode() const {return this->mode;};
     void setMode(AnimationModes mode) {this->mode = mode;};
 
     // timer
@@ -74,4 +86,5 @@ public:
 
     void draw();
     void setMaxCurrent(int mA) {this->controller.setMaxPowerInVoltsAndMilliamps(REFERENCE_VOLATAGE, mA);};
+    StripState currentState() const;
 };

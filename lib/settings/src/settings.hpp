@@ -16,7 +16,7 @@
 #define START_MODE                  AnimationModes::REGULAR     // start animation mode
 
 // SPEED
-#define MIN_SPEED_ITERATIONS        10000       // count of iterations to redraw frame on minimal speed (more iterations -> more slow)
+#define MIN_SPEED_ITERATIONS        20000       // count of iterations to redraw frame on minimal speed (more iterations -> more slow)
 #define MAX_SPEED_ITERATIONS        1000        // count of iterations to redraw frame on maximum speed
 
 // REMOTE CONTROL
@@ -27,8 +27,9 @@
 #define EXTRA_BYTES_RECEIVE_DELAY       20      // time (in milliseconds) to wait remaining bytes of bad packet before clear them
 
 // MESSAGES
-#define PRINT_DEBUG             false           // wether to print packet data to Serial
+#define PRINT_DEBUG             false           // wether to print packet data to serial port
 #define PRINT_FEEDBACK          true            // wether to print feedback messages to serial port
+#define PRINT_STATE             true            // wether to print strip state to serial port
 #define TOO_SHORT_PACKET_MSG    "More bytes expected in packet"
 #define POWER_OFF_MSG           "Power off"
 #define POWER_ON_MSG            "Power on"

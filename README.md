@@ -12,75 +12,55 @@ I want:
 - Cool backlight for my room with remote control from my smartphone;
 
 Particulary these functions:
-- On / Off / Off Timer;
-- Brightness control;
-- Static color modes (with choosing color);
-- Dynamic color modes (with choosing color or all rainbow colors).
+- on / off / off timer;
+- color control;
+- different color modes.
 
 ## Remote protocol
-You don't need this part if you're not going to modify code for you own puprposes.
+Each message consists of 3 bytes.
+1. command code byte;
+2. command argument byte;
+3. command argument operation byte.
 
-### Command code
-The first byte is a command code.
+### List of commands
+Table of all possible commands and their byte codes:
 
-List of commands and their codes:
-- `0` - Power
-- `1` - Brightness
-- `2` - Color
-- `3` - Speed (current mode animation speed)
-- `4` - Mode (leds behavior)
+| Command | Argument | Operation | Description |
+| :---: | :---: | :---: | :--- |
+| **Power** ||||
+| 0x00 | 0x00 | Ignored | turn off |
+| 0x00 | 0x01 | Ignored | turn on |
+| **Hue** ||||
+| 0x01 | 0xXX | 0x00 | set hue to XX |
+| 0x01 | 0xXX | 0x01 | decrease hue by XX |
+| 0x01 | 0xXX | 0x02 | increase hue by XX |
+| **Saturation** ||||
+| 0x02 | 0xXX | 0x00 | set saturation to XX |
+| 0x02 | 0xXX | 0x01 | decrease saturation by XX |
+| 0x02 | 0xXX | 0x02 | increase saturation by XX |
+| **Brightness** ||||
+| 0x03 | 0xXX | 0x00 | set brightness to XX |
+| 0x03 | 0xXX | 0x01 | decrease brightness by XX |
+| 0x03 | 0xXX | 0x02 | increase brightness by XX |
+| **Speed** ||||
+| 0x04 | 0xXX | 0x00 | set speed to XX |
+| 0x04 | 0xXX | 0x01 | decrease speed by XX |
+| 0x04 | 0xXX | 0x02 | increase speed by XX |
+| Mode ||||
+| 0x05 | 0xXX | Ignored | switch mode to XX |
+| **Timer** ||||
+| 0x06 | 0xXX | 0x00 | set turn off timer to **XX** minutes |
+| 0x06 | 0xXX | 0x01 | decrease turn off timer by **XX** minutes |
+| 0x06 | 0xXX | 0x02 | increase turn off timer by **XX** minutes |
 
-### Command argument
-The next bytes after the first are command first argument.
+## Refrences
+### Platform
+Project is based on [PlatformIO](https://platformio.org/). I use it as VS Code extension.
 
-Arguments of command `0` (Power):
-- `0` - turn off the strip
-- `1` - turn on the strip
-- `2`, `n` - set timer to turn off the strip in `n` minutes (1 - 255)
-- `3` - clear timer
-  
-Argument of command `1` (Brightness):
-- `n` - set peak brightness to `n` (0 - 255)
+### Dependencies
+- [FastLED](https://github.com/FastLED/FastLED) for easy control led strip. 
 
-Argument of command `2` (Color):
-- `h`, `s`, `v` - hex representation of color in HSV model
-  
-Argument of command `3` (Speed):
-- `n` - set speed to `n` (0 - 255)
-
-Argument of command `4` (Mode):
-- `0` - regular
-- ...
-- For more modes see enumeration `AnimationModes` in `Protocol.h`
-
-### Command argument action
-The next byte after the command argument bytes describes what to do with an argument.
-
-Power -> set timer:
-- `0` - set timer for `n` minutes
-- `1` - decrease timer by `n` minutes
-- `2` - increase timer by `n` minutes
-
-Brightness:
-- `0` - set brightnes to `n`
-- `1` - decrease brightnes by `n`
-- `2` - increase brightnes by `n`
-
-Color:
-- `0` - set color to `h`, `s`, `v`
-- `1` - decrease color by `h`, `s`, `v`
-- `2` - increase color by `h`, `s`, `v`
-
-Speed:
-- `0` - set speed to `n`
-- `1` - decrease speed by `n`
-- `2` - increase speed by `n`
-
-### Examples of bytes sequences
-- `0x00 0x01 0x00 0x00 0x00` - will turn on the strip, because the first byte is **Power** comand code and the second byte is **turn on strip** command argument;
-- `0x02 0xFF 0xFF 0xFF 0x00` - will set active color to white, because the first byte is **Color** comand code, next three bytes are **hex representation of color** and last byte is **set color to** argument interpretation.
-
-## Notes
+### Bluetooth app
 As sender app, I recommend [Serial Bluetooth Terminal](https://play.google.com/store/apps/details?id=de.kai_morich.serial_bluetooth_terminal) by Kai Morich. There you can nicely customize interface so it will look like usual remote. 
 
 

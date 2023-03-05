@@ -1,6 +1,7 @@
 #include <unity.h>
 #include <inttypes.h>
 #include "LedStrip.hpp"
+#include "settings.hpp"
 
 
 void testLedstripPower();
@@ -11,6 +12,12 @@ void testLedstripTurnOffTimer();
 
 
 int main( int argc, char **argv) {
+    FastLED.addLeds<WS2812B, LED_PIN, CONTROLLER_COLORS_ORDER>(
+        new CRGB[NUM_LEDS],
+        NUM_LEDS
+    ).setCorrection(TypicalLEDStrip);
+    FastLED.setMaxPowerInVoltsAndMilliamps(REFERENCE_VOLATAGE, CURRENT_LIMIT);
+
     UNITY_BEGIN();
     RUN_TEST(testLedstripPower);
     RUN_TEST(testLedstripHSV);
@@ -23,7 +30,12 @@ int main( int argc, char **argv) {
 
 void testLedstripPower()
 {
-    LedStrip ledStrip;
+    LedStrip ledStrip(
+        FastLED,
+        CHSV(START_HUE, START_SATURATION, START_BRIGHTNESS),
+        START_SPEED,
+        (AnimationModes)START_MODE
+    );
     TEST_ASSERT_TRUE(ledStrip.isOn() == true);
     ledStrip.turnOff(true);
     TEST_ASSERT_TRUE(ledStrip.isOn() == false);
@@ -34,7 +46,12 @@ void testLedstripPower()
 
 void testLedstripHSV()
 {
-    LedStrip ledStrip;
+    LedStrip ledStrip(
+        FastLED,
+        CHSV(START_HUE, START_SATURATION, START_BRIGHTNESS),
+        START_SPEED,
+        (AnimationModes)START_MODE
+    );
     CHSV color(128, 128, 128);
     ledStrip.setColor(color);
     TEST_ASSERT_TRUE(ledStrip.getColor() == color);
@@ -55,7 +72,12 @@ void testLedstripHSV()
 
 void testLedstripSpeed()
 {
-    LedStrip ledStrip;
+    LedStrip ledStrip(
+        FastLED,
+        CHSV(START_HUE, START_SATURATION, START_BRIGHTNESS),
+        START_SPEED,
+        (AnimationModes)START_MODE
+    );
     ledStrip.setSpeed(188);
     TEST_ASSERT_TRUE(ledStrip.getSpeed() == 188);
     ledStrip.increaseSpeed(12);
@@ -76,7 +98,12 @@ void testLedstripSpeed()
 
 void testLedstripMode()
 {
-    LedStrip ledStrip;
+    LedStrip ledStrip(
+        FastLED,
+        CHSV(START_HUE, START_SATURATION, START_BRIGHTNESS),
+        START_SPEED,
+        (AnimationModes)START_MODE
+    );
     ledStrip.setMode(AnimationModes::MORPHING_RAINBOW);
     TEST_ASSERT_TRUE(ledStrip.getMode() == AnimationModes::MORPHING_RAINBOW);
 }
@@ -84,7 +111,12 @@ void testLedstripMode()
 
 void testLedstripTurnOffTimer()
 {
-    LedStrip ledStrip;
+    LedStrip ledStrip(
+        FastLED,
+        CHSV(START_HUE, START_SATURATION, START_BRIGHTNESS),
+        START_SPEED,
+        (AnimationModes)START_MODE
+    );
     TEST_ASSERT_TRUE(ledStrip.hasTurnOffTimer() == false);
     TEST_ASSERT_TRUE(ledStrip.getTimer() == nullptr);
     ledStrip.setTurnOffTimer(new Timer(60));

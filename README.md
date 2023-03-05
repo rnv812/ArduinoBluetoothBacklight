@@ -4,7 +4,7 @@ Arduino Nano firmware for managing addressable LED strip via bluetooth (HC-06).
 
 ## Idea
 I have:
-- Adressable led strip (**ws2812b**);
+- Adressable led strip (ws2812b);
 - Arduino Nano;
 - Bluetooth module HC-06.
 

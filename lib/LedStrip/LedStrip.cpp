@@ -1,20 +1,12 @@
 #include "LedStrip.hpp"
 
 
-LedStrip::LedStrip() : controller(FastLED), color(CHSV(START_HUE, 255, START_BRIGHTNESS))
-{   
-    // leds
-    this->numLeds = NUM_LEDS;
-    this->controller.addLeds<WS2812B, LED_PIN, CONTROLLER_COLORS_ORDER>(new CRGB[numLeds], numLeds).setCorrection(TypicalLEDStrip);
-    
-    // settings
+LedStrip::LedStrip(CFastLED& FastLED, CHSV color, uint8_t speed, AnimationModes mode) : controller(FastLED), color(color)
+{     
     this->statusOn = true;
     this->timer = nullptr;
-    this->speed = START_SPEED;
-    this->mode = AnimationModes::REGULAR;
-    
-    // displaying
-    this->iterationsRemainedToRedraw = getActualIterationsToRedraw();
+    this->speed = speed;
+    this->mode = mode;
 }
 
 
@@ -55,25 +47,8 @@ void LedStrip::clearTurnOffTimer()
 }
 
 
-bool LedStrip::isTimeToRedraw()
-{
-    if (this->iterationsRemainedToRedraw > 0) {
-        this->iterationsRemainedToRedraw--;
-        return false;
-    }
-    else {
-        this->iterationsRemainedToRedraw = getActualIterationsToRedraw();
-        return true;
-    }
-}
-
-
 void LedStrip::draw()
 {
-    if(!isTimeToRedraw()) {
-        return;
-    }
-
     switch (this->mode)
     {
     case AnimationModes::REGULAR:
@@ -86,6 +61,24 @@ void LedStrip::draw()
         break;
     }
 }
+
+
+void LedStrip::regular()
+{
+    CRGB color;
+    hsv2rgb_rainbow(this->color, color);
+    this->controller.showColor(color);
+}
+
+
+void LedStrip::morphing_rainbow()
+{
+    static uint8_t gradientIteration;
+    CRGB color;
+    hsv2rgb_rainbow(CHSV(gradientIteration++, this->color.s, this->color.v), color);
+    this->controller.showColor(color);
+}
+
 
 StripState LedStrip::currentState() const
 {
@@ -105,28 +98,4 @@ StripState LedStrip::currentState() const
         state.timerMinutes = 0;
     }
     return state;
-}
-
-
-unsigned int LedStrip::getActualIterationsToRedraw()
-{
-    float scaledSpeed = this->speed / 255.f;
-    return MIN_SPEED_ITERATIONS - (MIN_SPEED_ITERATIONS - MAX_SPEED_ITERATIONS) * scaledSpeed;
-}
-
-
-void LedStrip::regular()
-{
-    CRGB color;
-    hsv2rgb_rainbow(this->color, color);
-    this->controller.showColor(color);
-}
-
-
-void LedStrip::morphing_rainbow()
-{
-    static uint8_t gradientIteration;
-    CRGB color;
-    hsv2rgb_rainbow(CHSV(gradientIteration++, this->color.s, this->color.v), color);
-    this->controller.showColor(color);
 }

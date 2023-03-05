@@ -1,8 +1,14 @@
 #pragma once
 #include "FastLED.h"
 #include "Timer.hpp"
-#include "protocol.hpp"
-#include "settings.hpp"
+
+
+enum class AnimationModes {
+    REGULAR = 0,
+    MORPHING_RAINBOW = 1,
+    
+    MODES_COUNT = 2
+};
 
 
 struct StripState {
@@ -22,7 +28,6 @@ class LedStrip
 private:
     // controller
     CFastLED& controller;
-    int numLeds;
 
     // state
     bool statusOn;
@@ -31,17 +36,12 @@ private:
     AnimationModes mode;
     Timer* timer;
 
-    // clocking
-    unsigned int iterationsRemainedToRedraw;
-    unsigned int getActualIterationsToRedraw();
-    bool isTimeToRedraw();
-
     // Animation modes
     void regular();
     void morphing_rainbow();
 
 public:
-    LedStrip();
+    LedStrip(CFastLED& FastLED, CHSV color, uint8_t speed, AnimationModes mode);
     ~LedStrip();
     
     // power
@@ -85,6 +85,5 @@ public:
     void clearTurnOffTimer();
 
     void draw();
-    void setMaxCurrent(int mA) {this->controller.setMaxPowerInVoltsAndMilliamps(REFERENCE_VOLATAGE, mA);};
     StripState currentState() const;
 };

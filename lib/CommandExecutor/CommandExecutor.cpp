@@ -3,7 +3,7 @@
 
 CommandResult CommandExecutor::executeCommand(const uint8_t *bytes, int size)
 {
-    if (size < DEFAULT_PROTOCOL_PACKET_SIZE) {
+    if (size < EXPECTED_PACKET_SIZE) {
         return CommandResult(TOO_SHORT_PACKET_MSG, false);
     }
 
@@ -117,7 +117,7 @@ CommandResult CommandExecutor::executeSpeedCommand(const uint8_t *bytes, int siz
 
 CommandResult CommandExecutor::executeModeCommand(const uint8_t *bytes, int size)
 {
-    if(bytes[1] >= (uint8_t)AnimationModes::END) {
+    if(bytes[1] >= (uint8_t)AnimationModes::MODES_COUNT) {
         return CommandResult(INVALID_ARG_MSG, false);
     }
     this->ledStrip.setMode((AnimationModes)bytes[1]);

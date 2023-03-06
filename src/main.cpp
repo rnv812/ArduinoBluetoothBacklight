@@ -22,6 +22,7 @@ CommandExecutor commandExecutor(ledStrip);
 unsigned int getFrameDuration(uint8_t currentSpeed, unsigned int minSpeedDuration, unsigned int maxSpeedDuration);
 unsigned long lastTime;
 
+
 void setup()
 {
     Serial.begin(9600);

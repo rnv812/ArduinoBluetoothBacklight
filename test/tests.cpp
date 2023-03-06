@@ -37,7 +37,7 @@ void testLedstripPower()
         (AnimationModes)START_MODE
     );
     TEST_ASSERT_TRUE(ledStrip.isOn() == true);
-    ledStrip.turnOff(true);
+    ledStrip.turnOff();
     TEST_ASSERT_TRUE(ledStrip.isOn() == false);
     ledStrip.turnOn();
     TEST_ASSERT_TRUE(ledStrip.isOn() == true);

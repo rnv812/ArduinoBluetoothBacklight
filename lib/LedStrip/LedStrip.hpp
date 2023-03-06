@@ -7,7 +7,7 @@ enum class AnimationModes {
     REGULAR = 0,
     MORPHING_RAINBOW = 1,
     
-    MODES_COUNT = 2
+    MODES_COUNT
 };
 
 
@@ -38,8 +38,7 @@ private:
 
     // Animation modes
     void regular();
-    void morphing_rainbow();
-
+    void morphingRainbow();
 public:
     LedStrip(CFastLED& FastLED, CHSV color, uint8_t speed, AnimationModes mode);
     ~LedStrip();
@@ -47,7 +46,7 @@ public:
     // power
     bool isOn() const {return this->statusOn;};
     void turnOn() {this->statusOn = true;};
-    void turnOff(bool testing=false);
+    void turnOff();
     
     // color
     CHSV getColor() const {return this->color;};

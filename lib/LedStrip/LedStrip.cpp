@@ -19,12 +19,9 @@ LedStrip::~LedStrip()
 }
 
 
-void LedStrip::turnOff(bool testing)
+void LedStrip::turnOff()
 {
-    this->controller.clear();
-    if (!testing) {
-        this->controller.showColor(CRGB::Black, 0);
-    }
+    this->controller.clear(true);
     this->statusOn = false;
 }
 
@@ -55,7 +52,7 @@ void LedStrip::draw()
         regular();
         break;
     case AnimationModes::MORPHING_RAINBOW:
-        morphing_rainbow();
+        morphingRainbow();
         break;
     default:
         break;
@@ -71,7 +68,7 @@ void LedStrip::regular()
 }
 
 
-void LedStrip::morphing_rainbow()
+void LedStrip::morphingRainbow()
 {
     static uint8_t gradientIteration;
     CRGB color;

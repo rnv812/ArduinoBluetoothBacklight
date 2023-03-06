@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include <inttypes.h>
+#include <math.h>
 #include "FastLED.h"
 #include "LedStrip.hpp"
 #include "Remote.hpp"
@@ -19,7 +20,7 @@ CommandExecutor commandExecutor(ledStrip);
 
 
 unsigned int getFrameDuration(uint8_t currentSpeed, unsigned int minSpeedDuration, unsigned int maxSpeedDuration);
-
+unsigned long lastTime;
 
 void setup()
 {
@@ -29,12 +30,13 @@ void setup()
         NUM_LEDS
     ).setCorrection(TypicalLEDStrip);
     FastLED.setMaxPowerInVoltsAndMilliamps(REFERENCE_VOLATAGE, CURRENT_LIMIT);
+    lastTime = millis();
 }
 
 
 void loop()
 {
-    // receive command from remote
+    // execute remote command
     if (remote.receiveAvailablePacket()) {
         CommandResult result = commandExecutor.executeCommand(remote.getPacketBytes(), PACKET_SIZE);
         if (!result.status) {
@@ -51,10 +53,25 @@ void loop()
         }
     }
 
-    // draw frame on led strip
+    // draw new frame on ledstrip
     if (ledStrip.isOn()) {
         ledStrip.draw();
     }
+
+    // check timer
+    if (ledStrip.hasTurnOffTimer()) {
+        if (abs(millis() - lastTime) > 60000) {
+            ledStrip.getTimer()->decreaseMinutes(1);
+            lastTime = millis();
+        }
+
+        if (ledStrip.getTimer()->isExpired()) {
+            ledStrip.turnOff();
+            ledStrip.clearTurnOffTimer();
+        }
+    }
+
+    // keep frame drawn for some time 
     delay(getFrameDuration(ledStrip.getSpeed(), MIN_SPEED_FRAME_DURATION, MAX_SPEED_FRAME_DURATION));
 }
 

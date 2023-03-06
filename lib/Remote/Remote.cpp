@@ -19,7 +19,7 @@ bool Remote::receiveAvailablePacket()
         this->packetBytes[i] = serial.read();
     }
 
-    for (int i = 0; i < this->packetSize; i++) {
+    for (int i = 0; i < this->packetEndingSize; i++) {
         serial.read();
     }
     

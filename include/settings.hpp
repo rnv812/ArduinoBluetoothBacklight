@@ -16,8 +16,8 @@
 #define START_MODE                  0           // start animation mode
 
 // SPEED
-#define MIN_SPEED_ITERATIONS        20000       // count of iterations to redraw frame on minimal speed (more iterations -> more slow)
-#define MAX_SPEED_ITERATIONS        1000        // count of iterations to redraw frame on maximum speed
+#define MAX_SPEED_FRAME_DURATION    10          // duration of one frame in ms on max speed
+#define MIN_SPEED_FRAME_DURATION    100         // duration of one frame in ms on min speed
 
 // REMOTE CONTROL
 #define PACKET_SIZE                     3       // length of byte sequence in single packet
@@ -28,6 +28,6 @@
 // MESSAGES
 #define PRINT_DEBUG             false           // wether to print packet data to serial port
 #define PRINT_FEEDBACK          true            // wether to print feedback messages to serial port
-#define PRINT_STATE             true            // wether to print strip state to serial port
+#define PRINT_STATE             false           // wether to print strip state to serial port
 
 

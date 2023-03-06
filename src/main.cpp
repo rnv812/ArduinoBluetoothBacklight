@@ -18,8 +18,7 @@ Remote remote(Serial, PACKET_SIZE, PACKET_ENDING_SIZE);
 CommandExecutor commandExecutor(ledStrip);
 
 
-unsigned int getIterationsPerFrame(uint8_t currentSpeed, unsigned int minSpeedIterations, unsigned int maxSpeedIterations);
-unsigned int iterationsRemainedToRedraw = getIterationsPerFrame(ledStrip.getSpeed(), MIN_SPEED_ITERATIONS, MAX_SPEED_ITERATIONS);
+unsigned int getFrameDuration(uint8_t currentSpeed, unsigned int minSpeedDuration, unsigned int maxSpeedDuration);
 
 
 void setup()
@@ -53,18 +52,15 @@ void loop()
     }
 
     // draw frame on led strip
-    if (ledStrip.isOn() && iterationsRemainedToRedraw == 0) {
+    if (ledStrip.isOn()) {
         ledStrip.draw();
-        iterationsRemainedToRedraw = getIterationsPerFrame(ledStrip.getSpeed(), MIN_SPEED_ITERATIONS, MAX_SPEED_ITERATIONS);
     }
-    else {
-        iterationsRemainedToRedraw--;
-    }
+    delay(getFrameDuration(ledStrip.getSpeed(), MIN_SPEED_FRAME_DURATION, MAX_SPEED_FRAME_DURATION));
 }
 
 
-unsigned int getIterationsPerFrame(uint8_t currentSpeed, unsigned int minSpeedIterations, unsigned int maxSpeedIterations)
+unsigned int getFrameDuration(uint8_t currentSpeed, unsigned int minSpeedDuration, unsigned int maxSpeedDuration)
 {
     double scaledSpeed = currentSpeed / 255.f;
-    return minSpeedIterations - (minSpeedIterations - maxSpeedIterations) * scaledSpeed;
+    return minSpeedDuration - (minSpeedDuration - maxSpeedDuration) * scaledSpeed;
 }

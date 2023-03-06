@@ -17,9 +17,6 @@ LedStrip ledStrip(
 );
 Remote remote(Serial, PACKET_SIZE, PACKET_ENDING_SIZE);
 CommandExecutor commandExecutor(ledStrip);
-
-
-unsigned int getFrameDuration(uint8_t currentSpeed, unsigned int minSpeedDuration, unsigned int maxSpeedDuration);
 unsigned long lastTime;
 
 
@@ -54,11 +51,6 @@ void loop()
         }
     }
 
-    // draw new frame on ledstrip
-    if (ledStrip.isOn()) {
-        ledStrip.draw();
-    }
-
     // check timer
     if (ledStrip.hasTurnOffTimer()) {
         if (abs(millis() - lastTime) > 60000) {
@@ -67,18 +59,11 @@ void loop()
         }
 
         if (ledStrip.getTimer()->isExpired()) {
-            ledStrip.turnOff();
+            ledStrip.turnOff(true);
             ledStrip.clearTurnOffTimer();
         }
     }
 
-    // keep frame drawn for some time 
-    delay(getFrameDuration(ledStrip.getSpeed(), MIN_SPEED_FRAME_DURATION, MAX_SPEED_FRAME_DURATION));
-}
-
-
-unsigned int getFrameDuration(uint8_t currentSpeed, unsigned int minSpeedDuration, unsigned int maxSpeedDuration)
-{
-    double scaledSpeed = currentSpeed / 255.f;
-    return minSpeedDuration - (minSpeedDuration - maxSpeedDuration) * scaledSpeed;
+    // draw new frame on ledstrip
+    ledStrip.draw();
 }

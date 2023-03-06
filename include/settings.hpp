@@ -15,19 +15,15 @@
 #define START_SPEED                 128         // start speed in range 0-255
 #define START_MODE                  0           // start animation mode
 
-// SPEED
-#define MAX_SPEED_FRAME_DURATION    10          // duration of one frame in ms on max speed
-#define MIN_SPEED_FRAME_DURATION    100         // duration of one frame in ms on min speed
-
 // REMOTE CONTROL
-#define PACKET_SIZE                     3       // length of byte sequence in single packet
-#define PACKET_ENDING_SIZE              0       // some bluetooth apps append bytes such as '\r' or '\n' to the end of message 
+#define PACKET_SIZE                 3           // length of byte sequence in single packet
+#define PACKET_ENDING_SIZE          0           // some bluetooth apps append bytes such as '\r' or '\n' to the end of message 
                                                 // set this parameter to 0 if your app doesn't send them
-#define EXTRA_BYTES_RECEIVE_DELAY       20      // time (in milliseconds) to wait remaining bytes of bad packet before clear them
+#define EXTRA_BYTES_RECEIVE_DELAY   20          // time (in milliseconds) to wait remaining bytes of bad packet before clear them
 
 // MESSAGES
-#define PRINT_DEBUG             false           // wether to print packet data to serial port
-#define PRINT_FEEDBACK          true            // wether to print feedback messages to serial port
-#define PRINT_STATE             false           // wether to print strip state to serial port
+#define PRINT_DEBUG                 false       // wether to print packet data to serial port
+#define PRINT_FEEDBACK              true        // wether to print feedback messages to serial port
+#define PRINT_STATE                 false       // wether to print strip state to serial port
 
 

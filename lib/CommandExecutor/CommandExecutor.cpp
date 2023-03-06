@@ -32,10 +32,10 @@ CommandResult CommandExecutor::executePowerCommand(const uint8_t *bytes, int siz
 {
     switch (bytes[1]) {
         case (uint8_t)PowerArgs::OFF:
-            this->ledStrip.turnOff();
+            this->ledStrip.turnOff(true);
             return CommandResult(POWER_OFF_MSG, true);
         case (uint8_t)PowerArgs::ON:
-            this->ledStrip.turnOn();
+            this->ledStrip.turnOn(true);
             return CommandResult(POWER_ON_MSG, true);
         default:
             return CommandResult(INVALID_ARG_MSG, false);

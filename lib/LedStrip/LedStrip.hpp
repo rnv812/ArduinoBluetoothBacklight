@@ -3,11 +3,19 @@
 #include "Timer.hpp"
 
 
+#define ON_OFF_TRANSITION_SPEED     12      // how fast to animate transition from off to on state and vise versa
+#define MAX_SPEED_FRAME_DURATION    5000    // duration of one frame in iterations on max speed
+#define MIN_SPEED_FRAME_DURATION    20000   // duration of one frame in iterations on min speed
+
+
 enum class AnimationModes {
     REGULAR = 0,
     MORPHING_RAINBOW = 1,
     
-    MODES_COUNT
+    MODES_COUNT,
+
+    TURNING_OFF,
+    TURNING_ON
 };
 
 
@@ -39,14 +47,24 @@ private:
     // Animation modes
     void regular();
     void morphingRainbow();
+
+    void updateDynamics();
+    bool smoothTurningOff;
+    bool smoothTurningOn;
+    uint8_t dynamicBrightness;
+
+    unsigned int iterationsToNewFrame;
+    bool isTimeToRedrawFrame() const {return this->iterationsToNewFrame == 0;};
+    unsigned int getFrameIterations() const;
+
 public:
     LedStrip(CFastLED& FastLED, CHSV color, uint8_t speed, AnimationModes mode);
     ~LedStrip();
     
     // power
     bool isOn() const {return this->statusOn;};
-    void turnOn() {this->statusOn = true;};
-    void turnOff();
+    void turnOn(bool smoothly = false);
+    void turnOff(bool smoothly = false);
     
     // color
     CHSV getColor() const {return this->color;};

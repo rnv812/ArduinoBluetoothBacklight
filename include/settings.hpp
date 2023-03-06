@@ -24,6 +24,6 @@
 // MESSAGES
 #define PRINT_DEBUG                 false       // wether to print packet data to serial port
 #define PRINT_FEEDBACK              true        // wether to print feedback messages to serial port
-#define PRINT_STATE                 false       // wether to print strip state to serial port
+#define PRINT_STATE                 true       // wether to print strip state to serial port
 
 

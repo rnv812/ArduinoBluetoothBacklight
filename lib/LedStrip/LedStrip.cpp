@@ -86,8 +86,6 @@ void LedStrip::draw()
         return;
     }
 
-    updateDynamics();
-
     switch (this->mode)
     {
     case AnimationModes::REGULAR:
@@ -96,9 +94,14 @@ void LedStrip::draw()
     case AnimationModes::MORPHING_RAINBOW:
         morphingRainbow();
         break;
+    case AnimationModes::BREATHING:
+        breathing();
+        break;
     default:
         break;
     }
+
+    updateDynamics();
 }
 
 
@@ -119,6 +122,42 @@ void LedStrip::morphingRainbow()
 }
 
 
+void LedStrip::breathing()
+{
+    if (this->smoothTurningOff || this->smoothTurningOn || this->dynamicBrightness <= BREATHING_MIN_BRIGHTNESS) {
+        regular();
+        return;
+    }
+    
+    static uint8_t brightnessReduction;
+    static bool directionUp;
+    const double step = (this->dynamicBrightness + 1) / 128.f;
+    static double accumulativeStep;
+
+    if (brightnessReduction == 0) {
+        directionUp = false;
+    }
+    else if (brightnessReduction == (this->dynamicBrightness - BREATHING_MIN_BRIGHTNESS)) {
+        directionUp = true;
+    }
+
+    accumulativeStep += step;
+    if (accumulativeStep >= 1.f) {
+        if (directionUp) {
+            brightnessReduction--;
+        }
+        else {
+            brightnessReduction++;
+        }
+        accumulativeStep = 0;
+    }
+
+    CRGB color;
+    hsv2rgb_rainbow(CHSV(this->color.h, this->color.s, this->dynamicBrightness - brightnessReduction), color);
+    this->controller.showColor(color);
+}
+
+
 void LedStrip::updateDynamics()
 {
     uint8_t step = ON_OFF_TRANSITION_SPEED * (1 - this->speed / 255.f) + 1;
@@ -129,6 +168,7 @@ void LedStrip::updateDynamics()
         }
         else {
             this->dynamicBrightness = 0;
+            this->controller.clear(true);
             this->smoothTurningOff = false;
             this->statusOn = false;
         }
@@ -142,6 +182,9 @@ void LedStrip::updateDynamics()
             this->smoothTurningOn = false;
             this->statusOn = true;
         }
+    }
+    else {
+        this->dynamicBrightness = this->color.v;
     }
 }
 

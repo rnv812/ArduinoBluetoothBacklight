@@ -3,14 +3,17 @@
 #include "Timer.hpp"
 
 
-#define ON_OFF_TRANSITION_SPEED     12      // how fast to animate transition from off to on state and vise versa
-#define MAX_SPEED_FRAME_DURATION    5000    // duration of one frame in iterations on max speed
-#define MIN_SPEED_FRAME_DURATION    20000   // duration of one frame in iterations on min speed
+#define ON_OFF_TRANSITION_SPEED     16      // how fast to animate transition from off to on state and vise versa
+#define MAX_SPEED_FRAME_DURATION    1000    // duration of one frame in iterations on max speed
+#define MIN_SPEED_FRAME_DURATION    10000   // duration of one frame in iterations on min speed
+
+#define BREATHING_MIN_BRIGHTNESS    64      // minimum brightness for the breathing animation mode
 
 
 enum class AnimationModes {
     REGULAR = 0,
     MORPHING_RAINBOW = 1,
+    BREATHING = 2,
     
     MODES_COUNT,
 
@@ -47,12 +50,16 @@ private:
     // Animation modes
     void regular();
     void morphingRainbow();
+    void breathing();
 
+
+    // transitions
     void updateDynamics();
     bool smoothTurningOff;
     bool smoothTurningOn;
     uint8_t dynamicBrightness;
 
+    // redraw clocking
     unsigned int iterationsToNewFrame;
     bool isTimeToRedrawFrame() const {return this->iterationsToNewFrame == 0;};
     unsigned int getFrameIterations() const;

@@ -5,8 +5,11 @@
 #include "LedStrip.hpp"
 #include "Remote.hpp"
 #include "CommandExecutor.hpp"
-#include "settings.hpp"
 #include "debug.hpp"
+
+
+#define DEBUG 0     // wether to print debug messages
+#define FEEDBACK 1  // wether to print feedback messages
 
 
 LedStrip ledStrip;
@@ -24,24 +27,23 @@ void setup()
 
 void loop()
 {
-    // execute remote command
     if (remote.receiveAvailablePacket()) {
         CommandResult result = commandExecutor.executeCommand(remote.getPacketBytes(), PACKET_SIZE);
         if (!result.status) {
             remote.waitExtraBytesAndClear(EXTRA_BYTES_RECEIVE_DELAY);
         }
-        if (PRINT_FEEDBACK) {
-            remote.sendMessage(result.message);
+
+        if (FEEDBACK) {
+            Serial.println(result.message);
         }
-        if (PRINT_DEBUG) {
-            debugPrint(Serial, remote.getPacketBytes(), PACKET_SIZE);
-        }
-        if (PRINT_STATE) {
+
+        if (DEBUG) {            
+            printPacketBytes(Serial, remote.getPacketBytes(), PACKET_SIZE);
             printState(Serial, ledStrip.currentState());
         }
+
     }
 
-    // check timer
     if (ledStrip.hasTurnOffTimer()) {
         if (abs(millis() - lastTime) > 60000) {
             ledStrip.getTimer()->decreaseMinutes(1);

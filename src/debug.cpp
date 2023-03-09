@@ -1,10 +1,9 @@
 #include "debug.hpp"
 
 
-void debugPrint(HardwareSerial& serial, const uint8_t *bytes, int size)
+void printPacketBytes(HardwareSerial& serial, const uint8_t *bytes, int size)
 {
-    serial.print("\n");
-    serial.println("=== DEBUG ===");
+    serial.println("=== PACKET BYTES ===");
 
     for (int i = 0; i < size; i++) {
         serial.print("Byte ");
@@ -13,13 +12,11 @@ void debugPrint(HardwareSerial& serial, const uint8_t *bytes, int size)
         serial.print(bytes[i], 16);
         serial.println();
     }
-    serial.println("=== END OF DEBUG ===");
 }
 
 void printState(HardwareSerial& serial, const StripState& state)
 {
-    serial.print("\n");
-    serial.println("=== STATE ===");
+    serial.println("=== STRIP STATE ===");
     serial.print("Power: ");
     serial.print(state.isOn? "on" : "off"); serial.println();
     serial.print("Hue: ");
@@ -36,5 +33,4 @@ void printState(HardwareSerial& serial, const StripState& state)
     serial.print(state.timerOn? "on" : "off"); serial.println();
     serial.print("Timer minutes: ");
     serial.print(state.timerMinutes); serial.println();
-    serial.println("=== END OF STATE ===");
 }

@@ -1,25 +1,23 @@
 #include "Remote.hpp"
 
 
-Remote::Remote(HardwareSerial& serial, int packetSize, int packetEndingSize) : serial(serial)
+Remote::Remote(HardwareSerial& serial) : serial(serial)
 {
-    this->packetSize = packetSize;
-    this->packetEndingSize = packetEndingSize;
-    this->packetBytes = new uint8_t[packetSize];
+    this->packetBytes = new uint8_t[PACKET_SIZE];
 }
 
 
 bool Remote::receiveAvailablePacket()
 {
-    if (this->serial.available() < (this->packetSize + this->packetEndingSize)) {
+    if (this->serial.available() < (PACKET_SIZE + PACKET_ENDING_SIZE)) {
         return false;
     }
 
-    for (int i = 0; i < this->packetSize; i++) {
+    for (int i = 0; i < PACKET_SIZE; i++) {
         this->packetBytes[i] = serial.read();
     }
 
-    for (int i = 0; i < this->packetEndingSize; i++) {
+    for (int i = 0; i < PACKET_ENDING_SIZE; i++) {
         serial.read();
     }
     

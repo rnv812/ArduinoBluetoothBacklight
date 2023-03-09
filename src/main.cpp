@@ -9,13 +9,8 @@
 #include "debug.hpp"
 
 
-LedStrip ledStrip(
-    FastLED,
-    CHSV(START_HUE, START_SATURATION, START_BRIGHTNESS),
-    START_SPEED,
-    (AnimationModes)START_MODE
-);
-Remote remote(Serial, PACKET_SIZE, PACKET_ENDING_SIZE);
+LedStrip ledStrip;
+Remote remote(Serial);
 CommandExecutor commandExecutor(ledStrip);
 unsigned long lastTime;
 
@@ -23,11 +18,6 @@ unsigned long lastTime;
 void setup()
 {
     Serial.begin(9600);
-    FastLED.addLeds<WS2812B, LED_PIN, CONTROLLER_COLORS_ORDER>(
-        new CRGB[NUM_LEDS],
-        NUM_LEDS
-    ).setCorrection(TypicalLEDStrip);
-    FastLED.setMaxPowerInVoltsAndMilliamps(REFERENCE_VOLATAGE, CURRENT_LIMIT);
     lastTime = millis();
 }
 

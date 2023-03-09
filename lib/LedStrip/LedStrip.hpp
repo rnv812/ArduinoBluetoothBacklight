@@ -2,6 +2,20 @@
 #include "FastLED.h"
 #include "Timer.hpp"
 
+// CONTROLLER
+#define NUM_LEDS                    30          // number of leds on strip (entire, not per meter)
+#define LED_PIN                     12          // data pin for led strip (D pin index)
+#define CONTROLLER_COLORS_ORDER     GRB         // colors order of protocol for you model of led strip (RGB, BRG, ...)
+#define LEDS_CONTROLLER             WS2812B     // leds controller (For more see FastLed documentation)
+#define REFERENCE_VOLATAGE          5           // reference voltage of power supply of your scheme (V)
+#define CURRENT_LIMIT               1000        // limit current consuption (mA)   
+
+// START STATE
+#define START_HUE                   128         // start hue in range 0-255
+#define START_SATURATION            255         // start saturation in range 0-255
+#define START_BRIGHTNESS            192         // start brightness in range 0-255
+#define START_SPEED                 128         // start speed in range 0-255
+#define START_MODE                  0           // start animation mode
 
 #define ON_OFF_TRANSITION_SPEED     16      // how fast to animate transition from off to on state and vise versa
 #define MAX_SPEED_FRAME_DURATION    1000    // duration of one frame in iterations on max speed
@@ -65,7 +79,7 @@ private:
     unsigned int getFrameIterations() const;
 
 public:
-    LedStrip(CFastLED& FastLED, CHSV color, uint8_t speed, AnimationModes mode);
+    LedStrip();
     ~LedStrip();
     
     // power

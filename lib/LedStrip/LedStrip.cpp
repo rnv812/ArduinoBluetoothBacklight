@@ -8,12 +8,22 @@ unsigned int LedStrip::getFrameIterations() const
 }
 
 
-LedStrip::LedStrip(CFastLED &FastLED, CHSV color, uint8_t speed, AnimationModes mode) : controller(FastLED), color(color)
-{     
+LedStrip::LedStrip() : controller(FastLED)
+{
+    FastLED.addLeds<LEDS_CONTROLLER, LED_PIN, CONTROLLER_COLORS_ORDER>(
+        new CRGB[NUM_LEDS],
+        NUM_LEDS
+    ).setCorrection(TypicalLEDStrip);
+    FastLED.setMaxPowerInVoltsAndMilliamps(REFERENCE_VOLATAGE, CURRENT_LIMIT);     
+
+    this->color.h = START_HUE;
+    this->color.s = START_SATURATION;
+    this->color.v = START_BRIGHTNESS;
+
     this->statusOn = true;
+    this->speed = START_SPEED;;
+    this->mode = (AnimationModes)START_MODE;
     this->timer = nullptr;
-    this->speed = speed;
-    this->mode = mode;
 
     this->smoothTurningOff = false;
     this->smoothTurningOn = false;

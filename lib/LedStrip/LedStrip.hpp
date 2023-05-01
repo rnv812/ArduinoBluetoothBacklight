@@ -29,6 +29,7 @@
 #define BREATHING_MIN_BRIGHTNESS    96      // lowest brightness in breathing modes
 #define BREATHING_RAINBOW_RATIO     16      // correlation of duration of inhale cycle to duration of rainbow cycle  
 #define MORPHING_COLOR_DEVIATION    16      // max deviation of hue to left and right directions of pallete from active color (limited to 127)
+#define RUNNING_RAINBOW_SCALE       3       // how much to compress length of rainbow wave
 
 
 enum class AnimationModes {
@@ -38,6 +39,7 @@ enum class AnimationModes {
     BREATHING,
     BREATHING_RAINBOX,
     MORPHING_COLOR,
+    RUNNING_RAINBOX,
     
     MODES_COUNT,
 

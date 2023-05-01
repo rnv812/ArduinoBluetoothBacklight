@@ -105,6 +105,9 @@ void LedStrip::drawModeFrame() {
         case AnimationModes::MORPHING_COLOR:
             morphingColor();
             break;
+        case AnimationModes::RUNNING_RAINBOX:
+            runningRainbow();
+            break;
         default:
             break;
     }
@@ -265,6 +268,19 @@ void LedStrip::morphingColor()
 
     hsv2rgb_rainbow(CHSV(this->color.h + colorDeviation, this->color.s, this->color.v), color);
     this->controller.showColor(color);
+}
+
+
+void LedStrip::runningRainbow()
+{
+    static uint8_t colorOffset;
+    for (int i = 0; i < this->controller.size(); i++) {
+        this->controller.leds()[i] = CHSV(colorOffset + (i * RUNNING_RAINBOW_SCALE) , color.s, color.v);
+    }
+
+    FastLED.show();
+    
+    colorOffset++;
 }
 
 

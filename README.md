@@ -3,18 +3,17 @@
 Arduino Nano firmware for managing addressable LED strip via bluetooth (HC-06).
 
 ## Introduction
+Intent: Backlight for room with remote control from smartphone;
+
 Used components:
 - Adressable led strip (ws2812b);
 - Arduino Nano;
 - Bluetooth module HC-06.
 
-Intent:
-Backlight for room with remote control from smartphone;
-
 Main functions:
 - power control (on, off, off  by timer);
 - color control (hue, saturation, brightness);
-- different color modes ().
+- different color modes.
 
 ## Remote protocol
 Each message consists of 3 bytes.
@@ -58,7 +57,7 @@ Table of all possible commands and their byte codes:
 1. breathing;
 2. rainbow;
 
-*Actual list of implemented modes is placed in source code [here](./lib/LedStrip/LedStrip.hpp) in `AnimationModes` enumeration*
+*Actual list of implemented modes is placed in source code [here](./lib/LedStrip/LedStrip.hpp) in `AnimationModes` enumeration.*
 
 ## References
 ### Platform

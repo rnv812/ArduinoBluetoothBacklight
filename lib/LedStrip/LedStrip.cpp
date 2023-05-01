@@ -1,10 +1,10 @@
 #include "LedStrip.hpp"
 
 
-unsigned int LedStrip::getFrameIterations() const
+unsigned int LedStrip::getModeFrameIterations() const
 {
     double scaledSpeed = this->speed / 255.f;
-    return MIN_SPEED_FRAME_DURATION - (MIN_SPEED_FRAME_DURATION - MAX_SPEED_FRAME_DURATION) * scaledSpeed;
+    return MIN_SPEED_MODE_FRAME_DURATION - (MIN_SPEED_MODE_FRAME_DURATION - MAX_SPEED_MODE_FRAME_DURATION) * scaledSpeed;
 }
 
 
@@ -25,40 +25,34 @@ LedStrip::LedStrip() : controller(FastLED)
     this->mode = (AnimationModes)START_MODE;
     this->timer = nullptr;
 
-    this->smoothTurningOff = false;
-    this->smoothTurningOn = false;
-    this->dynamicBrightness = this->color.v;
-
-    this->iterationsToNewFrame = getFrameIterations();
+    this->iterationsToNewModeFrame = getModeFrameIterations();
+    this->iterationsToNewTransitionFrame = POWER_TRANSITION_FRAME_DURATION;
 }
 
 
 LedStrip::~LedStrip()
 {
     delete[] this->controller.leds();
+
     if (this->timer != nullptr) {
         delete this->timer;
     }
 }
 
 
-void LedStrip::turnOn(bool smoothly)
+void LedStrip::turnOn()
 {
-    if (smoothly) {
-        this->smoothTurningOn = true;
-    } else {
-        this->dynamicBrightness = this->color.v;
-        this->statusOn = true;
-    }
+    this->statusOn = true;
 }
 
 
-void LedStrip::turnOff(bool smoothly)
+void LedStrip::turnOff()
 {
-    if (smoothly) {
-        this->smoothTurningOff = true;
-    } else {
-        this->dynamicBrightness = 0;
+    if (USE_POWER_TRANSITION) {
+        this->stashedMode = this->mode;
+        this->mode = AnimationModes::SMOOTH_TURN_OFF;
+    }
+    else {
         this->statusOn = false;
     }
 }
@@ -82,43 +76,78 @@ void LedStrip::clearTurnOffTimer()
 }
 
 
-void LedStrip::draw()
-{
-    if (!(isOn() || this->smoothTurningOn)) {
-        return;
-    }
-
-    if (isTimeToRedrawFrame()) {
-        this->iterationsToNewFrame = getFrameIterations();
+void LedStrip::drawModeFrame() {
+    // check if it is time to redraw mode frame
+    if (isTimeToRedrawModeFrame()) {
+        this->iterationsToNewModeFrame = getModeFrameIterations();
     }
     else {
-        this->iterationsToNewFrame--;
+        this->iterationsToNewModeFrame--;
         return;
     }
 
+    // choose animation mode
     switch (this->mode)
     {
-    case AnimationModes::REGULAR:
-        regular();
-        break;
-    case AnimationModes::MORPHING_RAINBOW:
-        morphingRainbow();
-        break;
-    case AnimationModes::BREATHING:
-        breathing();
-        break;
-    default:
-        break;
+        case AnimationModes::REGULAR:
+            regular();
+            break;
+        case AnimationModes::MORPHING_RAINBOW:
+            morphingRainbow();
+            break;
+        case AnimationModes::BREATHING:
+            breathing();
+            break;
+        default:
+            break;
+    }
+}
+
+
+void LedStrip::drawTransitionFrame()
+{
+    // check if it is time to redraw transition frame
+    if (isTimeToRedrawTransitionFrame()) {
+        this->iterationsToNewTransitionFrame = POWER_TRANSITION_FRAME_DURATION;
+    } 
+    else {
+        this->iterationsToNewTransitionFrame--;
+        return;
+    }
+    
+    switch (this->mode)
+    {
+        case AnimationModes::SMOOTH_TURN_OFF:
+            smoothTurnOff();
+            break;
+        case AnimationModes::SMOOTH_TURN_ON:
+            smoothTurnOn();
+            break;
+        default:
+            break;
+    }
+}
+
+
+void LedStrip::draw()
+{
+    if (!isOn()) {
+        return;
     }
 
-    updateDynamics();
+    if (this->mode < AnimationModes::MODES_COUNT) {
+        drawModeFrame();
+    }
+    else if (this->mode == AnimationModes::SMOOTH_TURN_OFF || this->mode == AnimationModes::SMOOTH_TURN_ON) {
+        drawTransitionFrame();
+    }
 }
 
 
 void LedStrip::regular()
 {
     CRGB color;
-    hsv2rgb_rainbow(CHSV(this->color.h, this->color.s, this->dynamicBrightness), color);
+    hsv2rgb_rainbow(CHSV(this->color.h, this->color.s, this->color.v), color);
     this->controller.showColor(color);
 }
 
@@ -127,74 +156,69 @@ void LedStrip::morphingRainbow()
 {
     static uint8_t gradientIteration;
     CRGB color;
-    hsv2rgb_rainbow(CHSV(gradientIteration++, this->color.s, this->dynamicBrightness), color);
+    hsv2rgb_rainbow(CHSV(gradientIteration++, this->color.s, this->color.v), color);
     this->controller.showColor(color);
 }
 
 
 void LedStrip::breathing()
 {
-    if (this->smoothTurningOff || this->smoothTurningOn || this->dynamicBrightness <= BREATHING_MIN_BRIGHTNESS) {
-        regular();
-        return;
-    }
-    
-    static uint8_t brightnessReduction;
-    static bool directionUp;
-    const double step = (this->dynamicBrightness + 1) / 128.f;
-    static double accumulativeStep;
+    static uint8_t brightnessReduction;   
+    static bool isInhaling;
 
     if (brightnessReduction == 0) {
-        directionUp = false;
+        isInhaling = false;
     }
-    else if (brightnessReduction == (this->dynamicBrightness - BREATHING_MIN_BRIGHTNESS)) {
-        directionUp = true;
+    else if (brightnessReduction == (255 - BREATHING_MIN_BRIGHTNESS)) {
+        isInhaling = true;
     }
 
-    accumulativeStep += step;
-    if (accumulativeStep >= 1.f) {
-        if (directionUp) {
-            brightnessReduction--;
-        }
-        else {
-            brightnessReduction++;
-        }
-        accumulativeStep = 0;
+    if (isInhaling) {
+        brightnessReduction--;
     }
+    else {
+        brightnessReduction++;
+    }
+
 
     CRGB color;
-    hsv2rgb_rainbow(CHSV(this->color.h, this->color.s, this->dynamicBrightness - brightnessReduction), color);
+    hsv2rgb_rainbow(CHSV(this->color.h, this->color.s, 255 - brightnessReduction), color);
     this->controller.showColor(color);
 }
 
 
-void LedStrip::updateDynamics()
+void LedStrip::smoothTurnOff()
 {
-    uint8_t step = ON_OFF_TRANSITION_SPEED * (1 - this->speed / 255.f) + 1;
+    static uint8_t brightnessReduction;
 
-    if (smoothTurningOff) {
-        if ((this->dynamicBrightness - step) >= 0) {
-            this->dynamicBrightness -= step;
-        }
-        else {
-            this->dynamicBrightness = 0;
-            this->controller.clear(true);
-            this->smoothTurningOff = false;
-            this->statusOn = false;
-        }
-    }
-    else if (smoothTurningOn) {
-        if ((this->dynamicBrightness + step) <= this->color.v) {
-            this->dynamicBrightness += step;
-        }
-        else {
-            this->dynamicBrightness = this->color.v;
-            this->smoothTurningOn = false;
-            this->statusOn = true;
-        }
+    if ((this->color.v - brightnessReduction) >= 0) {
+        CRGB color;
+        hsv2rgb_rainbow(CHSV(this->color.h, this->color.s, this->color.v - brightnessReduction), color);
+        this->controller.showColor(color);
+        brightnessReduction++;
     }
     else {
-        this->dynamicBrightness = this->color.v;
+        this->statusOn = false;
+        this->controller.clear(true);
+        this->mode = AnimationModes::SMOOTH_TURN_ON;
+        brightnessReduction = 0;
+    }
+}
+
+
+void LedStrip::smoothTurnOn()
+{
+    static uint8_t brightness;
+
+    if (brightness <= this->color.v) {
+        CRGB color;
+        hsv2rgb_rainbow(CHSV(this->color.h, this->color.s, brightness), color);
+        this->controller.showColor(color);
+        brightness++;
+    }
+    else {
+        this->mode = this->stashedMode;
+        brightness = 0;
     }
 }
 

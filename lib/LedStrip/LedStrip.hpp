@@ -17,22 +17,29 @@
 #define START_SPEED                 128         // start speed in range 0-255
 #define START_MODE                  0           // start animation mode
 
-#define ON_OFF_TRANSITION_SPEED     16      // how fast to animate transition from off to on state and vise versa
-#define MAX_SPEED_FRAME_DURATION    1000    // duration of one frame in iterations on max speed
-#define MIN_SPEED_FRAME_DURATION    10000   // duration of one frame in iterations on min speed
+// TRANSITIONS
+#define USE_POWER_TRANSITION                1       // use smooth transitions between on and off states
+#define POWER_TRANSITION_FRAME_DURATION     1000    // duration of one frame in iterations for power transition
 
-#define BREATHING_MIN_BRIGHTNESS    64      // minimum brightness for the breathing animation mode
+// SPEED
+#define MAX_SPEED_MODE_FRAME_DURATION       1000    // duration of one frame in iterations on max speed for common mode
+#define MIN_SPEED_MODE_FRAME_DURATION       10000   // duration of one frame in iterations on min speed for common mode
+
+// ANIMATION TWEAKS
+#define BREATHING_MIN_BRIGHTNESS    128     // lowest brightness in breathing mode
 
 
 enum class AnimationModes {
+    // common modes
     REGULAR = 0,
     MORPHING_RAINBOW = 1,
     BREATHING = 2,
     
     MODES_COUNT,
 
-    TURNING_OFF,
-    TURNING_ON
+    // internal states
+    SMOOTH_TURN_OFF,
+    SMOOTH_TURN_ON
 };
 
 
@@ -63,20 +70,24 @@ private:
 
     // Animation modes
     void regular();
-    void morphingRainbow();
     void breathing();
+    void morphingRainbow();
 
+    // Transitions
+    AnimationModes stashedMode;
+    void smoothTurnOff();
+    void smoothTurnOn();
 
-    // transitions
-    void updateDynamics();
-    bool smoothTurningOff;
-    bool smoothTurningOn;
-    uint8_t dynamicBrightness;
+    // clocking
+    unsigned int iterationsToNewModeFrame;
+    unsigned int iterationsToNewTransitionFrame;
+    bool isTimeToRedrawModeFrame() const {return this->iterationsToNewModeFrame == 0;};
+    bool isTimeToRedrawTransitionFrame() const {return this->iterationsToNewTransitionFrame == 0;};
+    unsigned int getModeFrameIterations() const;
 
-    // redraw clocking
-    unsigned int iterationsToNewFrame;
-    bool isTimeToRedrawFrame() const {return this->iterationsToNewFrame == 0;};
-    unsigned int getFrameIterations() const;
+    // drawing
+    void drawModeFrame();
+    void drawTransitionFrame();
 
 public:
     LedStrip();
@@ -84,9 +95,9 @@ public:
     
     // power
     bool isOn() const {return this->statusOn;};
-    void turnOn(bool smoothly = false);
-    void turnOff(bool smoothly = false);
-    
+    void turnOn();
+    void turnOff();
+
     // color
     CHSV getColor() const {return this->color;};
     void setColor(const CHSV& color) {this->color = color;};

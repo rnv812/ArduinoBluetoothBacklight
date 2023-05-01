@@ -52,11 +52,10 @@ void loop()
         }
 
         if (ledStrip.getTimer()->isExpired()) {
-            ledStrip.turnOff(true);
+            ledStrip.turnOff();
             ledStrip.clearTurnOffTimer();
         }
     }
 
-    // draw new frame on ledstrip
     ledStrip.draw();
 }

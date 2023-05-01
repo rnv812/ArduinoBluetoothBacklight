@@ -54,6 +54,7 @@ void LedStrip::turnOff()
     }
     else {
         this->statusOn = false;
+        this->controller.clear(true);
     }
 }
 

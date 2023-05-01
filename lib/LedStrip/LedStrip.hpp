@@ -18,7 +18,7 @@
 #define START_MODE                  0           // start animation mode
 
 // TRANSITIONS
-#define USE_POWER_TRANSITION                1       // use smooth transitions between on and off states
+#define USE_POWER_TRANSITION                1       // use smooth transition animation between on and off states
 #define POWER_TRANSITION_FRAME_DURATION     1000    // duration of one frame in iterations for power transition
 
 // SPEED

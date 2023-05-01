@@ -25,15 +25,17 @@
 #define MAX_SPEED_MODE_FRAME_DURATION       1000    // duration of one frame in iterations on max speed for common mode
 #define MIN_SPEED_MODE_FRAME_DURATION       10000   // duration of one frame in iterations on min speed for common mode
 
-// ANIMATION TWEAKS
-#define BREATHING_MIN_BRIGHTNESS    128     // lowest brightness in breathing mode
+// ANIMATION MODE TWEAKS
+#define BREATHING_MIN_BRIGHTNESS     96     // lowest brightness in breathing mode
+#define BREATHING_RAINBOW_RATIO      16     // correlation of duration of inhale cycle to duration of rainbow cycle  
 
 
 enum class AnimationModes {
     // common modes
-    REGULAR = 0,
-    MORPHING_RAINBOW = 1,
-    BREATHING = 2,
+    REGULAR,
+    MORPHING_RAINBOW,
+    BREATHING,
+    BREATHING_RAINBOX,
     
     MODES_COUNT,
 
@@ -72,6 +74,8 @@ private:
     void regular();
     void breathing();
     void morphingRainbow();
+    void breathingRainbow();
+    void runningRainbow();
 
     // Transitions
     AnimationModes stashedMode;

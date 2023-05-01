@@ -93,11 +93,14 @@ void LedStrip::drawModeFrame() {
         case AnimationModes::REGULAR:
             regular();
             break;
+        case AnimationModes::BREATHING:
+            breathing();
+            break;
         case AnimationModes::MORPHING_RAINBOW:
             morphingRainbow();
             break;
-        case AnimationModes::BREATHING:
-            breathing();
+        case AnimationModes::BREATHING_RAINBOX:
+            breathingRainbow();
             break;
         default:
             break;
@@ -153,15 +156,6 @@ void LedStrip::regular()
 }
 
 
-void LedStrip::morphingRainbow()
-{
-    static uint8_t gradientIteration;
-    CRGB color;
-    hsv2rgb_rainbow(CHSV(gradientIteration++, this->color.s, this->color.v), color);
-    this->controller.showColor(color);
-}
-
-
 void LedStrip::breathing()
 {
     static uint8_t brightnessReduction;   
@@ -187,6 +181,52 @@ void LedStrip::breathing()
     this->controller.showColor(color);
 }
 
+
+void LedStrip::morphingRainbow()
+{
+    static uint8_t gradientIteration;
+    CRGB color;
+    hsv2rgb_rainbow(CHSV(gradientIteration++, this->color.s, this->color.v), color);
+    this->controller.showColor(color);
+}
+
+
+void LedStrip::breathingRainbow()
+{
+    static uint8_t brightnessReduction;
+    static uint8_t gradientIteration;
+    static uint8_t gradientIterationAccumulator;
+    static bool isInhaling;
+
+    if (brightnessReduction == 0) {
+        isInhaling = false;
+    }
+    else if (brightnessReduction == (255 - BREATHING_MIN_BRIGHTNESS)) {
+        isInhaling = true;
+    }
+
+    if (isInhaling) {
+        brightnessReduction--;
+    }
+    else {
+        brightnessReduction++;
+    }
+
+    gradientIterationAccumulator++;
+
+    if (gradientIterationAccumulator < BREATHING_RAINBOW_RATIO) {
+        gradientIterationAccumulator++;
+    }
+    else {
+        gradientIterationAccumulator = 0;
+        gradientIteration++;
+    }
+
+    CRGB color;
+    hsv2rgb_rainbow(CHSV(gradientIteration, this->color.s, 255 - brightnessReduction), color);
+    this->controller.showColor(color);
+
+}
 
 void LedStrip::smoothTurnOff()
 {

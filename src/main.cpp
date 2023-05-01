@@ -8,8 +8,9 @@
 #include "debug.hpp"
 
 
-#define DEBUG 0     // wether to print debug messages
-#define FEEDBACK 1  // wether to print feedback messages
+#define DEBUG 0                 // print debug messages
+#define FEEDBACK 1              // print feedback messages
+#define MILLIS_60_SEC 60000     // ms in one minute (for timer ticking)
 
 
 LedStrip ledStrip;
@@ -30,7 +31,7 @@ void loop()
     if (remote.receiveAvailablePacket()) {
         CommandResult result = commandExecutor.executeCommand(remote.getPacketBytes(), PACKET_SIZE);
         if (!result.status) {
-            remote.waitExtraBytesAndClear(EXTRA_BYTES_RECEIVE_DELAY);
+            remote.waitExtraBytesAndClear();
         }
 
         if (FEEDBACK) {
@@ -45,7 +46,7 @@ void loop()
     }
 
     if (ledStrip.hasTurnOffTimer()) {
-        if (abs(millis() - lastTime) > 60000) {
+        if (abs(millis() - lastTime) > MILLIS_60_SEC) {
             ledStrip.getTimer()->decreaseMinutes(1);
             lastTime = millis();
         }

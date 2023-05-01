@@ -4,7 +4,7 @@
 
 #define PACKET_SIZE                 3           // length of byte sequence in single packet
 #define PACKET_ENDING_SIZE          0           // some bluetooth apps append bytes such as '\r' or '\n' to the end of message 
-#define EXTRA_BYTES_RECEIVE_DELAY   20          // time (in milliseconds) to wait remaining bytes of bad packet before clear them
+#define EXTRA_BYTES_RECEIVE_DELAY   20          // time (in milliseconds) to wait remaining bytes of corrupted packet before clear them
 
 
 class Remote
@@ -17,5 +17,5 @@ public:
     ~Remote() {delete[] packetBytes;};
     bool receiveAvailablePacket();
     const uint8_t* getPacketBytes() const {return this->packetBytes;};
-    void waitExtraBytesAndClear(int msDelay) {delay(msDelay); while (this->serial.available()) this->serial.read();};
+    void waitExtraBytesAndClear() {delay(EXTRA_BYTES_RECEIVE_DELAY); while (this->serial.available()) this->serial.read();};
 };

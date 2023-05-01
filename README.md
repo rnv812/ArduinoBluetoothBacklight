@@ -2,19 +2,19 @@
 
 Arduino Nano firmware for managing addressable LED strip via bluetooth (HC-06).
 
-## Idea
-I have:
+## Introduction
+Used components:
 - Adressable led strip (ws2812b);
 - Arduino Nano;
 - Bluetooth module HC-06.
 
-I want:
-- Cool backlight for my room with remote control from my smartphone;
+Intent:
+Backlight for room with remote control from smartphone;
 
-Particulary these functions:
-- on / off / off timer;
-- color control;
-- different color modes.
+Main functions:
+- power control (on, off, off  by timer);
+- color control (hue, saturation, brightness);
+- different color modes ().
 
 ## Remote protocol
 Each message consists of 3 bytes.
@@ -53,6 +53,13 @@ Table of all possible commands and their byte codes:
 | 0x06 | 0xXX | 0x02 | increase turn off timer by **XX** minutes |
 | 0x06 | Ignored | 0x03 | clear turn off timer |
 
+## List of implementd modes
+0. regular (backlight);
+1. breathing;
+2. rainbow;
+
+*Actual list of implemented modes is placed in source code [here](./lib/LedStrip/LedStrip.hpp) in `AnimationModes` enumeration*
+
 ## References
 ### Platform
 Project is based on [PlatformIO](https://platformio.org/). I use it as VS Code extension.
@@ -67,5 +74,4 @@ Use [this configuration file](./bluetooth/keyboard_config.txt) to get your app k
 
 <img src="./bluetooth/keyboard_demo.jpg" height="500px" />
 
-
- 
+May be in the future custom mobile app will be implemented...

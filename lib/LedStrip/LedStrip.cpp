@@ -99,11 +99,11 @@ void LedStrip::drawModeFrame() {
         case AnimationModes::MORPHING_RAINBOW:
             morphingRainbow();
             break;
-        case AnimationModes::BREATHING_RAINBOX:
-            breathingRainbow();
-            break;
         case AnimationModes::RUNNING_RAINBOX:
             runningRainbow();
+            break;
+        case AnimationModes::FIRE:
+            fire();
             break;
         default:
             break;
@@ -194,44 +194,6 @@ void LedStrip::morphingRainbow()
 }
 
 
-void LedStrip::breathingRainbow()
-{
-    static uint8_t brightnessReduction;
-    static uint8_t gradientIteration;
-    static uint8_t gradientIterationAccumulator;
-    static bool isInhaling;
-
-    if (brightnessReduction == 0) {
-        isInhaling = false;
-    }
-    else if (brightnessReduction == (255 - BREATHING_MIN_BRIGHTNESS)) {
-        isInhaling = true;
-    }
-
-    if (isInhaling) {
-        brightnessReduction--;
-    }
-    else {
-        brightnessReduction++;
-    }
-
-    gradientIterationAccumulator++;
-
-    if (gradientIterationAccumulator < BREATHING_RAINBOW_RATIO) {
-        gradientIterationAccumulator++;
-    }
-    else {
-        gradientIterationAccumulator = 0;
-        gradientIteration++;
-    }
-
-    CRGB color;
-    hsv2rgb_rainbow(CHSV(gradientIteration, this->color.s, 255 - brightnessReduction), color);
-    this->controller.showColor(color);
-
-}
-
-
 void LedStrip::runningRainbow()
 {
     static uint8_t colorOffset;
@@ -242,6 +204,24 @@ void LedStrip::runningRainbow()
     FastLED.show();
     
     colorOffset++;
+}
+
+
+void LedStrip::fire()
+{
+    static uint16_t hueStep;
+    for (int i = 0; i < this->controller.size(); i++) {
+        uint8_t intensity = inoise8(i * FIRE_SCALE, hueStep);
+        this->controller.leds()[i] = CHSV(
+            color.h + intensity / 255.f * FIRE_HUE_DEVIATION,
+            255 - intensity / 255.f * FIRE_SATURATION_DEVIATION,
+            color.v
+        );
+    }
+
+    FastLED.show();
+
+    hueStep += 16;
 }
 
 

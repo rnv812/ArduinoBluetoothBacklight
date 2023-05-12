@@ -55,10 +55,9 @@ Table of all possible commands and their byte codes:
 ## List of implementd modes
 0. regular (backlight);
 1. breathing;
-2. rainbow;
-3. breathing rainbow;
-4. morphing color;
-5. running rainbow.
+2. morphing rainbow;
+3. running rainbow;
+4. fire.
 
 *Actual list of implemented modes is placed in source code [here](./lib/LedStrip/LedStrip.hpp) in `AnimationModes` enumeration.*
 

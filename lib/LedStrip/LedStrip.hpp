@@ -27,9 +27,10 @@
 
 // ANIMATION MODE TWEAKS
 #define BREATHING_MIN_BRIGHTNESS    96      // lowest brightness in breathing modes
-#define BREATHING_RAINBOW_RATIO     16      // correlation of duration of inhale cycle to duration of rainbow cycle  
-#define MORPHING_COLOR_DEVIATION    16      // max deviation of hue to left and right directions of pallete from active color (limited to 127)
-#define RUNNING_RAINBOW_SCALE       2       // how much to compress length of rainbow wave
+#define RUNNING_RAINBOW_SCALE       4       // how much to compress length of rainbow wave
+#define FIRE_SCALE                  32      // how much to compress length of flame spruts
+#define FIRE_HUE_DEVIATION          32      // range of hue deviation for flame spruts
+#define FIRE_SATURATION_DEVIATION   64      // range of saturation deviation for flame spruts
 
 
 enum class AnimationModes {
@@ -37,7 +38,6 @@ enum class AnimationModes {
     REGULAR,
     BREATHING,
     MORPHING_RAINBOW,
-    BREATHING_RAINBOX,
     RUNNING_RAINBOX,
     FIRE,
     
@@ -78,9 +78,9 @@ private:
     void regular();
     void breathing();
     void morphingRainbow();
-    void breathingRainbow();
-    void morphingColor();
+    void meteors();
     void runningRainbow();
+    void fire();
 
     // Transitions
     AnimationModes stashedMode;

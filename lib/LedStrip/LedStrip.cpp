@@ -102,9 +102,6 @@ void LedStrip::drawModeFrame() {
         case AnimationModes::BREATHING_RAINBOX:
             breathingRainbow();
             break;
-        case AnimationModes::MORPHING_COLOR:
-            morphingColor();
-            break;
         case AnimationModes::RUNNING_RAINBOX:
             runningRainbow();
             break;
@@ -232,42 +229,6 @@ void LedStrip::breathingRainbow()
     hsv2rgb_rainbow(CHSV(gradientIteration, this->color.s, 255 - brightnessReduction), color);
     this->controller.showColor(color);
 
-}
-
-
-void LedStrip::morphingColor()
-{
-    const uint8_t skipSteps = 255 / MORPHING_COLOR_DEVIATION;
-    static int8_t skipAcumulator;
-    static int8_t colorDeviation;
-    static bool toRight; 
-    CRGB color;
-    
-    skipAcumulator++;
-    if (skipAcumulator < skipSteps) {
-        skipAcumulator++;
-        return;
-    }
-    else {
-        skipAcumulator = 0;
-    }
-
-    if (colorDeviation == MORPHING_COLOR_DEVIATION) {
-        toRight = false;
-    }
-    else if (colorDeviation == -(MORPHING_COLOR_DEVIATION)) {
-        toRight = true;
-    }
-
-    if (toRight) {
-        colorDeviation++;
-    }
-    else {
-        colorDeviation--;
-    }
-
-    hsv2rgb_rainbow(CHSV(this->color.h + colorDeviation, this->color.s, this->color.v), color);
-    this->controller.showColor(color);
 }
 
 

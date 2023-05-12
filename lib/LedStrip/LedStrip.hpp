@@ -35,11 +35,11 @@
 enum class AnimationModes {
     // common modes
     REGULAR,
-    MORPHING_RAINBOW,
     BREATHING,
+    MORPHING_RAINBOW,
     BREATHING_RAINBOX,
-    MORPHING_COLOR,
     RUNNING_RAINBOX,
+    FIRE,
     
     MODES_COUNT,
 

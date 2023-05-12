@@ -76,3 +76,6 @@ Use [this configuration file](./bluetooth/keyboard_config.txt) to get your app k
 <img src="./bluetooth/keyboard_demo.jpg" height="500px" />
 
 May be in the future custom mobile app will be implemented...
+
+## Notes
+If you have ESP8266, I recommend to see [this project](https://github.com/Aircoookie/WLED) which is much more functional.
